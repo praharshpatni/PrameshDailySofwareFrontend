@@ -1,0 +1,176 @@
+/* ChartGenerator.css */
+
+.chart-layout {
+    display: flex;
+    gap: 50px;
+    align-items: flex-start;
+    justify-content: center;
+    flex-wrap: wrap;
+    height: calc(100vh - 160px);
+    width: 83vw;
+    padding: 20px 0px 20px 0px;
+    box-sizing: border-box;
+    overflow-y: scroll;
+}
+
+@media (min-height: 900px) {
+    /* .chart-area {
+        flex: 0.5;
+    } */
+
+    /* .controls {
+        flex: 0.3;
+    } */
+
+    .chart-layout {
+        gap: 10px;
+        padding: 0px;
+    }
+}
+
+/* Left Side: Controls */
+.controls {
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+    max-height: fit-content;
+    background-color: #f4f6f8;
+    padding: 12px 20px;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.controls h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.controls label {
+    font-weight: 500;
+    margin-top: 12px;
+    margin-bottom: 4px;
+    display: block;
+    color: #444;
+}
+
+.controls input,
+.controls select {
+    width: 90%;
+    padding: 8px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    background-color: white;
+}
+
+.controls button {
+    width: 100%;
+    background-color: #3f51b5;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-top: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.controls button:hover {
+    background-color: #303f9f;
+}
+
+.controls hr {
+    margin: 18px 0;
+    border: none;
+    border-top: 1px solid #ccc;
+}
+
+/* Right Side: Charts */
+.chart-area {
+    flex: 1;
+    min-width: fit-content;
+    height: 600px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* padding: 20px; */
+    /* background-color: red; */
+    border-radius: 10px;
+}
+
+.chart-area canvas {
+    width: 100%;
+    max-width: 100%;
+}
+
+.amount-info {
+    margin-top: 0;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+    color: #222;
+    line-height: 1.5;
+}
+
+.chart-area .amount-info ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 500px;
+    flex-wrap: wrap;
+    margin-top: 0;
+}
+
+.chart-area .no-chart-msg {
+    text-align: center;
+    font-style: italic;
+    color: #888;
+    padding: 40px 20px;
+    /* border: 2px dashed #ccc; */
+    border-radius: 10px;
+}
+
+.chart-area .no-chart-msg img {
+    height: 300px;
+    object-fit: cover;
+}
+
+.chart-area .client_calculation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.download-btn {
+    margin-top: 5px;
+    padding: 10px 20px;
+    background-color: #0e7fe0;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.download-btn:hover {
+    background-color: #095bb5;
+}
+
+.no-print {
+    display: block;
+}
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}

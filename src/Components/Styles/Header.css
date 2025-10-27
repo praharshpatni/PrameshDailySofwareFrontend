@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+.header {
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: var(--primary-color, #f8f9fa);
+    color: white;
+    position: sticky;
+    z-index: 1000;
+    height: 50px;
+}
+
+.header-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+.header-title {
+    font-size: 16px;
+    font-weight: bold;
+    font-family: "Nunito", sans-serif;
+}
+
+.header-title-pramesh {
+    font-size: 21px;
+    font-weight: bold;
+    font-family: "Nunito", sans-serif;
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    flex: 1;
+    max-width: 600px;
+    margin: 0 20px;
+}
+
+.search-input {
+    width: 100%;
+    max-width: 500px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 1px solid #dfe1e5;
+    border-radius: 999px;
+    outline: none;
+    background-color: white;
+    box-shadow: 0 1px 6px rgba(32, 33, 36, 0.1);
+    transition: box-shadow 0.2s ease-in-out;
+    font-family: Arial, sans-serif;
+}
+
+.search-input:focus {
+    box-shadow: 0 1px 8px rgba(32, 33, 36, 0.2);
+    border-color: #dfe1e5;
+}
+
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #dfe1e5;
+    border-radius: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    margin-top: 4px;
+    box-shadow: 0 2px 8px rgba(32, 33, 36, 0.15);
+}
+
+.search-result-item {
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #202124;
+    font-family: Arial, sans-serif;
+    border-bottom: 1px solid #f1f3f4;
+    cursor: pointer;
+}
+
+.search-result-item:hover {
+    background-color: #f8f9fa;
+}
+
+.settings-button {
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    cursor: pointer;
+    color: white;
+    transition: color 0.2s;
+}
+
+.settings-button:hover {
+    color: #e8eaed;
+}

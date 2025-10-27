@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background-color: #ffffffee;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    width: 400px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-overlay .modal h2 {
+    margin: 15px 0px 20px 0px;
+    font-family: "Montserrat", sans-serif;
+}
+
+.modal p {
+    font-size: 17px;
+    margin: 0px 0px 20px 0px;
+    font-family: "Montserrat", sans-serif;
+}
+
+.modal-overlay .modal img {
+    mix-blend-mode: darken;
+    height: 100px;
+    width: 150px;
+    object-fit: cover;
+}
+
+.modal-buttons button {
+    margin: 20px 15px 0px 0px;
+    padding: 0.6rem 1.1rem;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    transition: all 300ms ease-in-out;
+}
+
+.modal-buttons button:first-child:hover {
+    background-color: #2ca407;
+    scale: 1.01;
+}
+
+.modal-buttons button:first-child {
+    background-color: #52bb32;
+    color: white;
+}
+
+.modal-buttons button:last-child:hover {
+    background-color: #ca1407;
+    scale: 1.01;
+}
+
+
+.modal-buttons button:last-child {
+    background-color: #ff6358;
+    color: white;
+}

@@ -1,0 +1,529 @@
+.editing-row {
+    background-color: #fff3cd;
+}
+
+.table_main_con {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.table-wrapper {
+    height: calc(100vh - 220px);
+    width: 98%;
+    overflow-x: auto;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    align-self: center;
+}
+
+.table-wrapper.fullscreen-mode {
+    background-color: whitesmoke;
+    height: 92vh;
+    overflow-x: auto;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+.table-wrapper .no-data-container {
+    min-height: fit-content;
+    height: 65vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.table-wrapper .no-data-container img {
+    height: 90%;
+}
+
+.data-table {
+    width: fit-content;
+    border-collapse: collapse;
+    table-layout: fixed;
+    padding: 10px 0px;
+}
+
+.data-table td {
+    border: 1px solid #ccc;
+    padding: 5px 5px;
+}
+
+.data-table th {
+    background-color: #eaeaea;
+    padding: 6px;
+    font-weight: 600;
+}
+
+
+.data-table thead th {
+    background-color: #3f51b5;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    width: 290px;
+    border-right: 1px solid white;
+}
+
+.data-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.data-table input {
+    border: none;
+    outline: none;
+    width: 100%;
+    padding: 4px;
+    background-color: transparent;
+    font-size: 14px;
+}
+
+.data-table input[type="checkbox"] {
+    width: 10%;
+}
+
+.delete-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: crimson;
+    font-size: 18px;
+}
+
+.delete-btn:hover {
+    color: darkred;
+}
+
+.add-row-container {
+    margin: 10px 0px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.add-row-container button {
+    padding: 8px 16px;
+    background-color: var(--secondary-color);
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.add-row-container button:disabled {
+    background-color: #9e9e9e;
+    cursor: not-allowed;
+}
+
+td button:disabled {
+    cursor: not-allowed;
+}
+
+.warning {
+    color: red;
+    font-size: 14px;
+}
+
+.data-table th:first-child,
+.data-table td:first-child {
+    width: 80px;
+    white-space: nowrap;
+    padding: 6px 8px;
+    text-align: center;
+}
+
+.data-table th:last-child,
+.data-table td:last-child {
+    white-space: nowrap;
+    text-align: center;
+}
+
+.copy-btn svg {
+    color: #444;
+    transition: color 0.2s;
+}
+
+.copy-btn:hover svg {
+    color: #007bff;
+}
+
+.field-cell .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.field-cell .copy-container {
+    position: relative;
+    display: inline-block;
+    margin-left: 6px;
+    visibility: hidden;
+}
+
+.input-wrapper:hover .copy-container {
+    visibility: visible;
+}
+
+.field-cell:hover .copy-container {
+    display: inline-block;
+}
+
+.field-cell .copy-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    font-size: 14px;
+    color: #555;
+}
+
+.field-cell .copy-btn svg {
+    color: #555;
+    transition: color 0.2s;
+}
+
+.copy-btn:hover svg {
+    color: #007bff;
+}
+
+.copied-text {
+    position: absolute;
+    top: -20px;
+    left: -10px;
+    font-size: 10px;
+    background: #dff0d8;
+    color: #3c763d;
+    padding: 2px 4px;
+    border-radius: 3px;
+    z-index: 100;
+}
+
+.copy-input {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background-color: #fff;
+    font-weight: 600;
+}
+
+select .deleted-option {
+    color: red;
+    font-style: italic;
+}
+
+select.copy-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 14px;
+    padding-right: 30px;
+    cursor: pointer;
+}
+
+.status-validate {
+    color: #065f46;
+}
+
+.status-registered {
+    color: #1e3a8a;
+}
+
+.status-rejected {
+    color: #991b1b;
+}
+
+.status-pending {
+    color: #92400e;
+}
+
+.status-hold {
+    color: #4c1d95;
+}
+
+.status-process {
+    color: #5b21b6;
+}
+
+.status-na {
+    color: #374151;
+}
+
+.modification-validate {
+    color: #166534;
+}
+
+.modification-registered {
+    color: #1e40af;
+}
+
+.modification-rejected {
+    color: #7f1d1d;
+}
+
+.modification-pending {
+    color: #92400e;
+}
+
+.modification-hold {
+    color: #3730a3;
+}
+
+.modification-process {
+    color: #6b21a8;
+}
+
+.modification-na {
+    color: #4b5563;
+}
+
+.sort-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 15px;
+    color: #0f0f0f;
+}
+
+.sort-btn:hover {
+    color: #000;
+}
+
+/* date picker desing  */
+/* Base style for date input */
+input[type="date"].custom-date {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #fafafa;
+    color: #333;
+    transition: 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+/* When focused */
+input[type="date"].custom-date:focus {
+    outline: none;
+    border-color: #007bff;
+    background-color: #fff;
+    box-shadow: 0 0 3px rgba(0, 123, 255, 0.4);
+}
+
+/* Placeholder style (for browsers that show YYYY-MM-DD before selection) */
+input[type="date"].custom-date:invalid {
+    color: #888;
+}
+
+/* Hide the calendar icon (optional) */
+input[type="date"].custom-date::-webkit-calendar-picker-indicator {
+    color: transparent;
+    background: url("data:image/svg+xml,%3Csvg width='16' height='16' fill='gray' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2h1a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h1V0h2v2h4V0h2v2zM4 6h8v8H4V6z'/%3E%3C/svg%3E") no-repeat right 10px center;
+    background-size: 16px;
+    opacity: 0.7;
+}
+
+/* Hover effect for calendar icon */
+input[type="date"].custom-date:hover::-webkit-calendar-picker-indicator {
+    opacity: 1;
+}
+
+/* Works in Firefox */
+input[type="date"].custom-date::-moz-focus-inner {
+    border: 0;
+}
+
+/* === Filter UI (with active indicator + search) === */
+
+.filter-header {
+    position: relative;
+    padding: 6px 10px;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* When a column has filters applied */
+.filtered-column {
+    /* subtle underline + inset shadow to hint it's filtered */
+    box-shadow: inset 0 -2px 0 0 rgba(59, 130, 246, 0.9);
+    background-image: linear-gradient(to bottom, rgba(59, 130, 246, 0.10), rgba(59, 130, 246, 0.06));
+}
+
+/* tiny badge showing count of selected values */
+.filter-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 6px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    background: #ffffff;
+    color: #1f2937;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.filter-btn-wrapper {
+    position: relative;
+    margin-left: auto;
+}
+
+/* Default hidden; show on hover/focus */
+.filter-header .filter-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: rgba(255, 255, 255, 0.9);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 120ms ease, visibility 120ms, background 120ms ease;
+}
+
+.filter-header:hover .filter-btn,
+.filter-header .filter-btn:focus {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Active filter button state */
+.filter-btn-active {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff !important;
+}
+
+/* Dropdown container */
+.filter-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    min-width: 240px;
+    max-width: 380px;
+    max-height: 360px;
+    overflow: auto;
+    background: #fff;
+    color: #111;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    padding: 8px;
+    z-index: 9999;
+    font-size: 13px;
+}
+
+/* Search input */
+.filter-search-wrap {
+    width: 90%;
+    padding: 4px 2px 8px 2px;
+}
+
+.filter-search-input {
+    width: 100%;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 10px;
+    outline: none;
+}
+
+.filter-search-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* Dropdown actions */
+.filter-dropdown .filter-dropdown-actions {
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+    margin-bottom: 6px;
+}
+
+.small-btn {
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    padding: 6px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.small-btn:hover {
+    background: #eef2ff;
+}
+
+/* Values list */
+.filter-values-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 4px 2px;
+}
+
+.filter-value-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.filter-value-item:hover {
+    background: #f8fafc;
+}
+
+.value-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.no-values {
+    color: #6b7280;
+    padding: 8px;
+    text-align: center;
+}
+
+/* Keep header icons visible on your dark header */
+.data-table thead th .filter-btn {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.data-table thead th .filter-dropdown {
+    color: #111;
+}
+
+@media (max-width: 800px) {
+    .filter-dropdown {
+        right: 0;
+        left: 0;
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+}

@@ -1,0 +1,531 @@
+.settings-page {
+    max-width: 100%;
+    min-height: 100vh;
+    background: #747474;
+    /* display: flex; */
+}
+
+.settings-header {
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+}
+
+.settings-header .back-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.settings-header img {
+    height: 50px;
+}
+
+.settings-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+    margin-right: 40px;
+}
+
+.side_by_side_data {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: calc(100vh - 70px);
+    background-color: #484848;
+    /* gap: 10px; */
+}
+
+.settings-tabs {
+    height: calc(100vh - 70px);
+    width: 270px;
+    background-color: #303031;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.settings-tabs .tab-button {
+    padding: 20px 10px;
+    text-align: left;
+    margin-left: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.settings-tabs .active_line {
+    height: 40px;
+    width: 5px;
+    background-color: var(--active-color);
+    border-radius: 8px;
+    position: absolute;
+    left: 0;
+    transition: all 300ms ease;
+}
+
+.settings-tabs .tab-button:hover {
+    color: var(--active-color);
+}
+
+.settings-tabs .tab-button.active {
+    background-color: transparent;
+    color: var(--active-color);
+}
+
+.settings-content {
+    height: calc(100vh - 120px);
+    padding: 15px 5px 15px 30px;
+    width: calc(100% - 250px);
+}
+
+.settings-page .settings-segment {
+    width: 100%;
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
+    color: white;
+    scrollbar-width: thin;
+    /* For Firefox */
+    scrollbar-color: transparent transparent;
+    /* Hide scrollbar by default in Firefox */
+}
+
+.settings-page .settings-segment:hover {
+    scrollbar-color: #888 transparent;
+    /* Show scrollbar on hover in Firefox */
+}
+
+/* For WebKit browsers (Chrome, Safari, Edge) */
+.settings-page .settings-segment::-webkit-scrollbar {
+    width: 6px;
+    /* Thin scrollbar width */
+}
+
+.settings-page .settings-segment::-webkit-scrollbar-track {
+    background: transparent;
+    /* Transparent track */
+}
+
+.settings-page .settings-segment::-webkit-scrollbar-thumb {
+    background: transparent;
+    /* Hide thumb by default */
+    border-radius: 10px;
+}
+
+.settings-page .settings-segment:hover::-webkit-scrollbar-thumb {
+    background: #888;
+    /* Show thumb on hover */
+}
+
+.settings-segment::-webkit-scrollbar {
+    width: 8px;
+}
+
+.settings-segment::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 4px;
+}
+
+.settings-segment::-webkit-scrollbar-thumb {
+    background: #9ca3af;
+    border-radius: 4px;
+}
+
+.settings-segment::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
+}
+
+/* for user profile  */
+
+.user-profile-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 85vh;
+    width: 100%;
+    /* background: #f4f4f4; */
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.user-profile-modern-card {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    padding: 0 2rem 2rem 3rem;
+    max-width: 650px;
+    width: 100%;
+    gap: 2rem;
+    transition: box-shadow 0.3s ease;
+}
+
+.user-profile-modern-card:hover {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.user-profile-left .user-initials-circle {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    /* background: linear-gradient(to right, #383838, #5d5d5d); */
+    background: linear-gradient(to right, #cc5892, #a362c1, #ae77d1);
+    color: #FFFFFF;
+    font-size: 2.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+    z-index: 10;
+}
+
+.user-initials-circle .gradient_effect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    background: linear-gradient(to right, #191b20, #202020);
+    z-index: -1;
+    transition: all 400ms ease;
+}
+
+.user-initials-circle:hover .gradient_effect {
+    height: 93%;
+    width: 93%;
+}
+
+.user-profile-left .user-initials-circle span {
+    transition: all 200ms linear;
+}
+
+.user-profile-left .user-initials-circle:hover span {
+    scale: 1.1;
+}
+
+.user-profile-right {
+    flex: 1;
+}
+
+.user-profile-right .top_part {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 25px 0px;
+}
+
+.autosave-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.autosave-toggle-wrapper label {
+    font-weight: 600;
+}
+
+.autosave-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.autosave-toggle input {
+    display: none;
+    /* Hide default checkbox */
+}
+
+.toggle-slider {
+    position: relative;
+    width: 50px;
+    height: 30px;
+    background: #ccc;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5px;
+    transition: background 0.3s ease;
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background: #fff;
+    border-radius: 13px;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.toggle-on {
+    margin-left: 4px;
+    opacity: 0;
+}
+
+.toggle-off {
+    margin-left: auto;
+    margin-right: 4px;
+    opacity: 1;
+}
+
+.autosave-toggle input:checked+.toggle-slider {
+    background: #69f387;
+    /* Blue when enabled */
+}
+
+.autosave-toggle input:checked+.toggle-slider::before {
+    transform: translateX(30px);
+    /* Slide to the right when checked */
+}
+
+.autosave-toggle input:checked+.toggle-slider .toggle-on {
+    opacity: 1;
+}
+
+.autosave-toggle input:checked+.toggle-slider .toggle-off {
+    opacity: 0;
+}
+
+.autosave-toggle:hover .toggle-slider {
+    background: #b3b3b3;
+    /* Lighter gray on hover when off */
+}
+
+.autosave-toggle input:checked:hover+.toggle-slider {
+    background: #67e482;
+}
+
+.user-profile-right .autosave-toggle {
+    /* background-color: red; */
+    padding: 20px;
+}
+
+.user-profile-right .user-logout-button {
+    padding: 8px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: none;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 20px;
+    cursor: pointer;
+    color: white;
+    background-color: #333;
+    transition: all 200ms ease;
+    font-family: "Roboto", sans-serif;
+}
+
+.user-profile-right .user-logout-button:hover {
+    scale: 1.1;
+    box-shadow: rgba(100, 100, 111, 0.324) 0px 7px 29px 0px;
+}
+
+.user-name {
+    font-size: 1.8rem;
+    margin-bottom: 0.3rem;
+    color: #222;
+}
+
+.user-email {
+    font-size: 1.1rem;
+    color: #666;
+    margin: 0;
+    /* margin-bottom: 1.2rem; */
+}
+
+.user-profile-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.edit-profile-btn,
+.logout-btn {
+    padding: 0.5rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.edit-profile-btn {
+    background-color: #1976d2;
+    color: #fff;
+}
+
+.edit-profile-btn:hover {
+    background-color: #1565c0;
+}
+
+.logout-btn {
+    background-color: #e53935;
+    color: #fff;
+}
+
+.logout-btn:hover {
+    background-color: #c62828;
+}
+
+/* for excel file upload  */
+
+.import-excel-wrapper {
+    height: 99%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 20px;
+    color: white;
+    padding: 0;
+}
+
+.selected-file-preview {
+    font-size: 15px;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+
+.import-excel-wrapper h3 {
+    font-size: 2rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.selection_container select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #f9fafb;
+    color: #1f2937;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+.selection_container,
+.upload_container {
+    width: 100%;
+    max-width: 80%;
+}
+
+.selection_container label {
+    font-size: 18px;
+}
+
+.upload_container {
+    height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    flex-direction: column;
+    padding: 15px 30px 30px 30px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 10px;
+    color: #222;
+}
+
+.upload_container label {
+    width: 100%;
+    height: 40px;
+    font-size: 18px;
+    align-self: flex-start;
+}
+
+.upload_container .excel_upload_ui {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    height: calc(100% - 40px);
+    border: 3px dashed lightgray;
+    padding: 10px 0px;
+    border-radius: 10px;
+}
+
+.upload_container .excel_upload_ui img {
+    height: 170px;
+    width: 200px;
+    object-fit: cover;
+}
+
+.upload_container .excel_upload_ui .drag_drop_text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.upload_container .excel_upload_ui .drag_drop_text h2 {
+    margin: 0;
+    font-weight: 450;
+    font-size: 20px;
+    color: #484848b1;
+}
+
+.upload_container .excel_upload_ui .drag_drop_text span {
+    font-weight: 300;
+    color: #303031;
+    margin-top: 7px;
+    font-size: 14px;
+}
+
+.upload_container .excel_upload_ui .choose_file {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.upload_container .excel_upload_ui .choose_file button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    color: #484848;
+    background-color: #D3D3D3;
+    cursor: pointer;
+}
+
+.upload_container .excel_upload_ui .choose_file span {
+    margin-top: 8px;
+    color: #303031;
+    font-weight: 300;
+    font-size: 14px;
+}
