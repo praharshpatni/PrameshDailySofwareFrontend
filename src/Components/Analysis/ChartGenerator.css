@@ -4,23 +4,16 @@
     display: flex;
     gap: 50px;
     align-items: flex-start;
-    justify-content: center;
+    justify-content: space-evenly;
     flex-wrap: wrap;
     height: calc(100vh - 160px);
-    width: 83vw;
-    padding: 20px 0px 20px 0px;
+    width: 80vw;
+    padding: 10px 0px 0px 0px;
     box-sizing: border-box;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 @media (min-height: 900px) {
-    /* .chart-area {
-        flex: 0.5;
-    } */
-
-    /* .controls {
-        flex: 0.3;
-    } */
 
     .chart-layout {
         gap: 10px;
@@ -29,21 +22,22 @@
 }
 
 /* Left Side: Controls */
-.controls {
-    flex: 1;
-    min-width: 300px;
-    max-width: 400px;
-    max-height: fit-content;
+.chart-layout .controls {
+    width: 400px;
+    height: fit-content;
     background-color: #f4f6f8;
-    padding: 12px 20px;
+    padding: 15px 20px 20px 20px;
     border-radius: 10px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
-.controls h3 {
+.chart-layout .controls h3 {
     font-size: 18px;
     margin-bottom: 12px;
     color: #333;
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
 }
 
 .controls label {
@@ -90,17 +84,19 @@
 
 /* Right Side: Charts */
 .chart-area {
-    flex: 1;
-    min-width: fit-content;
-    height: 600px;
+    width: 400px;
+    height: fit-content;
     max-height: 80vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    /* padding: 20px; */
-    /* background-color: red; */
+    justify-content: flex-start;
     border-radius: 10px;
+}
+
+.chart-area .chart {
+    height: 400px;
+    width: 400px;
 }
 
 .chart-area canvas {
@@ -108,15 +104,18 @@
     max-width: 100%;
 }
 
-.amount-info {
+.chart-area .amount-info {
     margin-top: 0;
     font-size: 15px;
     display: flex;
     align-items: center;
     flex-direction: column;
-    gap: 5px;
     color: #222;
     line-height: 1.5;
+}
+
+.chart-area .amount-info p {
+    margin-top: 0;
 }
 
 .chart-area .amount-info ul {
@@ -151,7 +150,6 @@
 }
 
 .download-btn {
-    margin-top: 5px;
     padding: 10px 20px;
     background-color: #0e7fe0;
     color: white;
@@ -172,5 +170,23 @@
 @media print {
     .no-print {
         display: none !important;
+    }
+}
+
+
+@media screen and (max-width: 1200px) {
+    .chart-layout {
+        justify-content: space-between;
+        gap: 0px;
+        width: 79vw;
+    }
+
+    .chart-layout .controls {
+        width: 40%;
+        height: fit-content;
+    }
+
+    .controls hr {
+        margin: 15px 0;
     }
 }

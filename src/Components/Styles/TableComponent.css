@@ -1,3 +1,91 @@
+/* TableComponent.css - Updated for virtualization */
+.data-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.field-cell {
+    overflow: hidden;
+}
+
+.display-input {
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
+    width: 100%;
+    min-height: 1em;
+    outline: none;
+    cursor: text;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.display-input:focus {
+    background: #f0f0f0;
+}
+
+.field-cell:focus .display-input {
+    background: #e3f2fd;
+}
+
+.display-input:focus {
+    outline: none;
+}
+
+.input-wrapper {
+    min-width: 0;
+}
+
+.copy-input {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.selected-range-cell {
+    background-color: rgba(66, 133, 244, 0.15) !important;
+    outline: 2px solid #4285f4;
+    outline-offset: -2px;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 0 0 1px rgba(66, 133, 244, 0.3);
+}
+
+.selection-summary-bar {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    height: fit-content;
+    width: fit-content;
+    background: #c8f79d;
+    padding: 10px 16px;
+    font-weight: bold;
+    font-size: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+}
+
+.selection-summary-bar .sum {
+    color: #444;
+    font-size: 14px;
+}
+
+.selection-summary-bar.hide {
+    display: none;
+}
+
+.selection-summary-bar.show {
+    display: show;
+}
+
+.sum.show {
+    display: inline;
+}
+
+
 .editing-row {
     background-color: #fff3cd;
 }
@@ -7,6 +95,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
+    position: relative;
 }
 
 .table-wrapper {
@@ -60,15 +149,46 @@
     font-weight: 600;
 }
 
-
 .data-table thead th {
     background-color: #3f51b5;
     color: white;
     position: sticky;
     top: 0;
     z-index: 2;
-    width: 290px;
+    width: 230px;
     border-right: 1px solid white;
+}
+
+/* for table heading */
+.data-table thead th[data-label="checkbox"] {
+    width: 40px;
+}
+
+.checkbox-icon {
+    width: 15px;
+    height: 15px;
+    color: #ccc;
+    transition: color 0.2s ease;
+}
+
+.custom-checkbox-wrapper:has(input:checked) .checkbox-icon {
+    color: #007bff;
+    /* Blue when selected */
+}
+
+/* for table heading */
+.data-table thead th[data-label="index"] {
+    width: 60px;
+    text-align: center;
+}
+
+/* for table values */
+.data-table tbody td[data-label="index"] {
+    text-align: center;
+}
+
+.data-table tbody tr {
+    height: 45px;
 }
 
 .data-table tbody tr:nth-child(even) {
@@ -85,7 +205,7 @@
 }
 
 .data-table input[type="checkbox"] {
-    width: 10%;
+    width: 10px;
 }
 
 .delete-btn {
@@ -134,9 +254,8 @@ td button:disabled {
 
 .data-table th:first-child,
 .data-table td:first-child {
-    width: 80px;
+    width: 60px;
     white-space: nowrap;
-    padding: 6px 8px;
     text-align: center;
 }
 
@@ -196,14 +315,13 @@ td button:disabled {
 
 .copied-text {
     position: absolute;
-    top: -20px;
-    left: -10px;
+    top: 0px;
+    left: -25px;
     font-size: 10px;
     background: #dff0d8;
     color: #3c763d;
     padding: 2px 4px;
     border-radius: 3px;
-    z-index: 100;
 }
 
 .copy-input {
@@ -293,21 +411,19 @@ select.copy-input {
     background: none;
     border: none;
     cursor: pointer;
-    margin-left: 15px;
-    color: #0f0f0f;
+    color: #ffffff;
 }
 
 .sort-btn:hover {
-    color: #000;
+    color: #f3f3f3;
 }
 
-/* date picker desing  */
+/* date picker desing */
 /* Base style for date input */
 input[type="date"].custom-date {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-
     width: 100%;
     padding: 6px 10px;
     border: 1px solid #ccc;
@@ -351,7 +467,6 @@ input[type="date"].custom-date::-moz-focus-inner {
 }
 
 /* === Filter UI (with active indicator + search) === */
-
 .filter-header {
     position: relative;
     padding: 6px 10px;
@@ -377,8 +492,8 @@ input[type="date"].custom-date::-moz-focus-inner {
     justify-content: center;
     min-width: 18px;
     height: 18px;
-    padding: 0 6px;
-    border-radius: 999px;
+    padding: 0 3px;
+    border-radius: 30px;
     font-size: 11px;
     font-weight: 700;
     background: #ffffff;
@@ -433,81 +548,131 @@ input[type="date"].custom-date::-moz-focus-inner {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
     border-radius: 8px;
     padding: 8px;
-    z-index: 9999;
+    z-index: 99999;
     font-size: 13px;
 }
 
 /* Search input */
-.filter-search-wrap {
-    width: 90%;
-    padding: 4px 2px 8px 2px;
+.filter-dropdown {
+    max-height: 400px;
+    overflow-y: auto;
 }
 
 .filter-search-input {
-    width: 100%;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    font-size: 10px;
-    outline: none;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-bottom: 8px;
 }
 
 .filter-search-input:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
 }
 
-/* Dropdown actions */
-.filter-dropdown .filter-dropdown-actions {
+.filter-dropdown-actions {
     display: flex;
-    gap: 6px;
-    justify-content: flex-end;
-    margin-bottom: 6px;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
 }
 
 .small-btn {
-    background: #f3f4f6;
-    border: 1px solid #e5e7eb;
-    padding: 6px 8px;
-    border-radius: 6px;
-    cursor: pointer;
+    flex: 1;
+    padding: 6px 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
     font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .small-btn:hover {
-    background: #eef2ff;
+    background-color: #e0e0e0;
+    border-color: #ccc;
 }
 
-/* Values list */
+.small-btn:active {
+    background-color: #d5d5d5;
+}
+
 .filter-values-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 4px 2px;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 .filter-value-item {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 4px 6px;
-    border-radius: 4px;
+    padding: 6px 8px;
     cursor: pointer;
+    transition: background-color 0.2s;
+    border-radius: 4px;
 }
 
 .filter-value-item:hover {
-    background: #f8fafc;
+    background-color: #f0f0f0;
+}
+
+.filter-value-item input[type="checkbox"] {
+    margin-right: 8px;
+    cursor: pointer;
 }
 
 .value-label {
+    /* flex: 1; */
+    font-size: 13px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
+.date-format-hint {
+    font-size: 11px;
+    color: #666;
+    margin-left: 6px;
+    font-style: italic;
+    opacity: 0.7;
+}
+
 .no-values {
-    color: #6b7280;
-    padding: 8px;
+    padding: 16px;
     text-align: center;
+    color: #666;
+    font-style: italic;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    margin: 8px 0;
+}
+
+/* Highlight matching text in filter results */
+.highlight-match {
+    background-color: #fff9c4;
+    padding: 1px 2px;
+    border-radius: 2px;
+}
+
+/* Custom scrollbar for filter dropdown */
+.filter-values-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.filter-values-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.filter-values-list::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.filter-values-list::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
 }
 
 /* Keep header icons visible on your dark header */
@@ -515,9 +680,133 @@ input[type="date"].custom-date::-moz-focus-inner {
     color: rgba(255, 255, 255, 0.9);
 }
 
-.data-table thead th .filter-dropdown {
-    color: #111;
+/* Column focus highlighting */
+.focused-column-header {
+    background-color: #abcffffa !important;
+    color: #86c3ff !important;
+    border-bottom: 1px solid #2196f3 !important;
 }
+
+.focused-cell {
+    background-color: #bbdefb !important;
+    border: 1px solid #1976d2 !important;
+}
+
+/* Enhanced Loading Filters UI */
+.loading-filters {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    gap: 16px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #f3f4f6;
+    border-top: 4px solid #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-filters p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #374151;
+    text-align: center;
+}
+
+.loading-subtext {
+    font-size: 14px;
+    color: #6b7280;
+    font-style: italic;
+    max-width: 300px;
+}
+
+/* Auto-save indicator styles */
+.auto-save-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #ffa726;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.3s ease;
+}
+
+.auto-save-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Enhanced focused cell styles for better visibility */
+.focused-cell {
+    position: relative;
+    box-shadow: inset 0 0 0 2px #0078d4;
+    /* z-index: 2; */
+    background: rgba(0, 120, 212, 0.05) !important;
+}
+
+.focused-cell::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border: 2px solid #0078d4;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.editing-cell {
+    z-index: 3;
+}
+
 
 @media (max-width: 800px) {
     .filter-dropdown {
@@ -525,5 +814,192 @@ input[type="date"].custom-date::-moz-focus-inner {
         left: 0;
         margin-left: 8px;
         margin-right: 8px;
+    }
+
+    .data-table thead th {
+        width: 200px;
+    }
+
+    /* for table head font size  */
+    .data-table thead {
+        font-size: 12px;
+    }
+
+    .header-title {
+        font-size: 12px;
+    }
+
+    /* fot table data font size  */
+    .data-table tbody td[data-label="index"] {
+        font-size: 14px;
+    }
+
+    .copy-input {
+        font-size: 13px;
+    }
+
+    .data-table input {
+        font-size: 13px;
+    }
+
+    input[type="date"].custom-date {
+        font-size: 13px;
+    }
+}
+
+/* Enhanced Excel-like styling */
+.table-wrapper {
+    background:
+        /* Main grid */
+        linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+        linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+        /* Subtle column guides */
+        linear-gradient(90deg, rgba(0, 100, 200, 0.02) 230px, transparent 230px),
+        /* Row number column guide */
+        linear-gradient(90deg, rgba(0, 100, 200, 0.03) 100px, transparent 100px);
+    background-size:
+        20px 20px,
+        20px 20px,
+        230px 20px,
+        100px 20px;
+    background-position:
+        -1px -1px,
+        -1px -1px,
+        -1px -1px,
+        -1px -1px;
+    background-color: #f8f9fa;
+    border: 1px solid #e1e1e1;
+}
+
+/* Excel-style headers */
+.data-table thead th {
+    background: linear-gradient(to bottom, #3f51b5, #303f9f);
+    color: white;
+    border-right: 1px solid #5c6bc0;
+    font-weight: 600;
+    font-size: 13px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Excel-style cells */
+.data-table td {
+    border-right: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    background: white;
+    font-size: 13px;
+}
+
+/* Remove borders from last cells */
+.data-table td:last-child,
+.data-table th:last-child {
+    border-right: none;
+}
+
+/* Row hover effect */
+.data-table tbody tr:hover td {
+    background-color: #f5f5f5;
+}
+
+/* Focus cell enhancement */
+.focused-cell {
+    box-shadow:
+        inset 0 0 0 2px #0078d4,
+        0 0 0 1px #0078d4;
+    background: #e3f2fd !important;
+    z-index: 5;
+}
+
+/* Virtualization placeholder with subtle pattern */
+.virtualization-placeholder {
+    background:
+        repeating-linear-gradient(45deg,
+            transparent,
+            transparent 5px,
+            rgba(0, 0, 0, 0.02) 5px,
+            rgba(0, 0, 0, 0.02) 10px);
+}
+
+/* Empty state with prominent grid */
+.empty-scroll-area {
+    background:
+        linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: -1px -1px;
+    opacity: 0.6;
+}
+
+/* Loading overlay */
+.loading-filters {
+    background: rgba(248, 249, 250, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid #e1e1e1;
+}
+
+/* Undo/Redo Controls */
+.undo-redo-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 12px;
+}
+
+.history-info {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.undo-btn,
+.redo-btn {
+    padding: 4px 8px;
+    border: 1px solid #dee2e6;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s;
+}
+
+.undo-btn:hover:not(:disabled),
+.redo-btn:hover:not(:disabled) {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.undo-btn:disabled,
+.redo-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.undo-btn {
+    color: #dc3545;
+}
+
+.redo-btn {
+    color: #28a745;
+}
+
+
+.undo-btn:disabled,
+.redo-btn:disabled {
+    color: #6c757d;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 800px) {
+    .table-wrapper {
+        background-size:
+            30px 30px,
+            30px 30px,
+            200px 30px,
+            60px 30px;
     }
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "./Redux/UserSlice";
+import PendingPage from "./Components/LoginPage/PendingPage";
 import LoginErrorPage from "./Components/LoginPage/LoginErrorPage";
 import LoginPage from "./Components/LoginPage/LoginPage";
 import Header from "./Components/Header";
@@ -14,7 +15,44 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { setFavicon } from "./Urls/AllData";
 import useInactivityLogout from "./hooks/useInactivityLogout";
+import RejectedPage from "./Components/LoginPage/RejectedPage";
 
+const UnauthorizedPage = () => {
+  const isLoggedIn = useSelector((state) => !!state.user.currentUser?.email);
+
+  const handleGoHome = () => {
+    window.location.href = isLoggedIn ? "/main" : "/";
+  };
+
+  return (
+    <div className="unauthorized-page">
+      <div className="unauthorized-content">
+        <div className="warning-icon">⚠️</div>
+        <h1>DANGER: Unauthorized Access Attempt</h1>
+        <p className="warning-message">
+          You have navigated to a restricted or unknown path. This action is not permitted and has been logged for security review.
+        </p>
+        <p className="sub-message">
+          If this was unintentional, please return to the main application. Unauthorized access attempts may result in account suspension.
+        </p>
+        <div className="actions">
+          <button className="home-button" onClick={handleGoHome}>
+            Return to {isLoggedIn ? "Dashboard" : "Login"}
+          </button>
+          <button
+            className="report-button"
+            onClick={() => window.open('mailto:security@yourapp.com?subject=Unauthorized Access Report&body=I encountered an unauthorized path: ' + window.location.pathname)}
+          >
+            Report Issue
+          </button>
+        </div>
+        <div className="footer-note">
+          <small>Security is our priority. Stay safe online.</small>
+        </div>
+      </div>
+    </div>
+  );
+};
 const MainLayout = React.memo(({ activeModule, setActiveModule, isSidebarPinned, setIsSidebarPinned }) => {
   return (
     <div className="app">
@@ -50,13 +88,6 @@ function App() {
 
   useEffect(() => {
     if (!currentUserEmail || allUsers.length === 0) return;
-
-    // const currentUser = allUsers.find((user) => user.email === currentUserEmail);
-    // const currentUserName = currentUser?.name;
-
-    // console.log("🔐 Logged in user:", currentUser);
-    // console.log("📦 current user name:", currentUserName);
-    // console.log("📦 allUsers:", allUsers);
   }, [currentUserEmail, allUsers]);
 
   useEffect(() => {
@@ -92,7 +123,7 @@ function App() {
 
   useEffect(() => {
     const handler = (e) => {
-      const key = e.key.toLowerCase();
+      const key = e.key?.toLowerCase();
       if ((e.altKey && e.shiftKey && key === "p") || (e.ctrlKey && key === "b")) {
         e.preventDefault();
         setIsSidebarPinned((prev) => !prev);
@@ -110,6 +141,9 @@ function App() {
             setActiveModule("FFL");
             break;
           case "4":
+            setActiveModule("RealValue");
+            break;
+          case "5":
             setActiveModule("FD");
             break;
           default:
@@ -166,7 +200,9 @@ function App() {
             isLoggedIn ? <Navigate to="/main" /> : <LoginPage onLoginSuccess={handleLoginSuccess} />
           }
         />
-        <Route path="/login-error" element={<LoginErrorPage />} />
+        <Route path="/login-error" element={isLoggedIn ? <Navigate to="/main" /> : <LoginErrorPage />} />
+        <Route path="/pending" element={isLoggedIn ? <Navigate to="/main" /> : <PendingPage />} />
+        <Route path="/rejected" element={isLoggedIn ? <Navigate to="/main" /> : <RejectedPage />} />
         <Route
           path="/main"
           element={isLoggedIn ? <MainLayout {...memoizedMainLayoutProps} /> : <Navigate to="/" />}
@@ -175,6 +211,7 @@ function App() {
           path="/settings"
           element={isLoggedIn ? <SettingsPage /> : <Navigate to="/" />}
         />
+        <Route path="*" element={<UnauthorizedPage />} />
       </Routes>
 
     </>

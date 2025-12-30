@@ -34,7 +34,7 @@ export default function LoginErrorPage() {
                     <button className="error-button back-button" onClick={() => navigate('/')}>
                         Back to Login
                     </button>
-                    <button className="error-button contact-button" onClick={() => window.location.href = 'mailto:admin@pramesh.com'}>
+                    <button className="error-button contact-button" onClick={() => window.location.href = 'mailto:praharsh@pramesh.com'}>
                         Contact Admin
                     </button>
                 </div>

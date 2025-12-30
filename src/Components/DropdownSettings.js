@@ -203,10 +203,10 @@ const DropdownSettings = () => {
             {confirmDeleteTag && (
                 <div className="confirm_delete_overlay" onClick={() => setConfirmDeleteTag(null)}>
                     <div className="confirm-delete-box" onClick={(e) => e.stopPropagation()}>
-                        <FaCircleInfo style={{ marginBottom: "20px", height: "35px", width: "35px", color: "white" }} />
+                        <FaCircleInfo style={{ marginBottom: "10px", height: "35px", width: "35px", alignSelf: "center", color: "white" }} />
                         <div className="dropdown_details">
-                            <div>Are you sure you want to </div>
-                            <p>delete "<strong>{confirmDeleteTag.value}</strong>" from "{confirmDeleteTag.field}"?</p>
+                            <div>Are you sure you want to
+                                delete "<strong>{confirmDeleteTag.value}</strong>" from "{confirmDeleteTag.field}"?</div>
                         </div>
 
                         <div className="delete_button_container">
@@ -217,8 +217,9 @@ const DropdownSettings = () => {
                         </div>
                     </div>
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 };
 

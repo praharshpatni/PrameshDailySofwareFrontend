@@ -20,7 +20,7 @@ const socket = io(socket_url, {
 function EditPassword() {
 
     const [userName_Pass, set_userName_Pass] = useState(0);
-    const total_user = Math.max(0, userName_Pass.length - 1);
+    const total_user = Math.max(0, userName_Pass.length);
     const [showAddUser, setShowAddUser] = useState(false);
     const [openMenuId, setOpenMenuId] = useState(null);
     const [menuPosition, setMenuPosition] = useState({ left: 0, top: 0 });
@@ -222,105 +222,108 @@ function EditPassword() {
                 <button onClick={handleAddUser}>Add Account</button>
             </div>
             {userName_Pass && userName_Pass?.length > 0 ? (
-                <table className='userdata_table'>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>User Name </th>
-                            <th>Email</th>
-                            <th>Password</th>
-                            <th>Login Status</th>
-                            <th className='action_head'>Action</th>
-                        </tr>
-                    </thead>
+                <div className="userdata_table_wrapper">
+                    <table className='userdata_table'>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User Name </th>
+                                <th>Email</th>
+                                <th>Password</th>
+                                <th>Login Status</th>
+                                <th className='action_head'>Action</th>
+                            </tr>
+                        </thead>
 
 
-                    <tbody>
-                        {userName_Pass.filter((user) => user.user_name !== "Praharsh").map((user) => {
-                            const isEditing = editingId === user.id;
-                            return (
-                                <tr key={user.id} data-user-id={user.id}>
-                                    <td>{user.id}</td>
-                                    {!isEditing ? (
-                                        <>
-                                            <td>{user.user_name}</td>
-                                            <td>{user.user_email}</td>
-                                            <td>{user.password}</td>
-                                            <td>{user.is_logged_in ? "Yes" : "No"}</td>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <td className='editable'>
-                                                <input
-                                                    type="text"
-                                                    value={editUserName}
-                                                    onChange={(e) => setEditUserName(e.target.value)}
-                                                    onKeyDown={(e) => {
-                                                        if (e.key === 'Enter') handleSaveEdit(user.id);
-                                                        if (e.key === 'Escape') handleCancelEdit();
-                                                    }}
-                                                />
-                                            </td>
-                                            <td className='editable'>
-                                                <input
-                                                    type="email"
-                                                    value={editUserEmail}
-                                                    onChange={(e) => setEditUserEmail(e.target.value)}
-                                                    onKeyDown={(e) => {
-                                                        if (e.key === 'Enter') handleSaveEdit(user.id);
-                                                        if (e.key === 'Escape') handleCancelEdit();
-                                                    }}
-                                                />
-                                            </td>
-                                            <td className='editable'>
-                                                <input
-                                                    type="text"
-                                                    value={editPassword}
-                                                    onChange={(e) => setEditPassword(e.target.value)}
-                                                    onKeyDown={(e) => {
-                                                        if (e.key === 'Enter') handleSaveEdit(user.id);
-                                                        if (e.key === 'Escape') handleCancelEdit();
-                                                    }}
-                                                />
-                                            </td>
-                                            <td>{user.is_logged_in ? "Yes" : "No"}</td> {/* Login status not editable */}
-                                        </>
-                                    )}
-                                    <td className='actions'>
+                        <tbody>
+                            {/* {userName_Pass.filter((user) => user.user_name !== "Praharsh").map((user) => { */}
+                            {userName_Pass.map((user) => {
+                                const isEditing = editingId === user.id;
+                                return (
+                                    <tr key={user.id} data-user-id={user.id}>
+                                        <td>{user.id}</td>
                                         {!isEditing ? (
-                                            <div className="action_menu_container">
-                                                <span className="edit_option" onClick={(e) => toggleMenu(user.id, e)}> <img src={Edit} alt="" /> </span>
-
-                                                {openMenuId === user.id && createPortal(
-                                                    <div
-                                                        className={`dropdown_menu show`}
-                                                        style={{
-                                                            position: 'fixed',
-                                                            left: `${menuPosition.left}px`,
-                                                            top: `${menuPosition.top}px`,
-                                                            zIndex: 998
-                                                        }}
-                                                    >
-                                                        <button onClick={() => handleEdit(user)} style={{ borderBottom: "1px solid grey" }}>Edit</button>
-                                                        <button onClick={() => deleteConfirmationPopup(user)}>Delete</button>
-                                                    </div>,
-                                                    document.body
-                                                )}
-
-                                            </div>
+                                            <>
+                                                <td>{user.user_name}</td>
+                                                <td>{user.user_email}</td>
+                                                <td>{user.password}</td>
+                                                <td>{user.is_logged_in ? "Yes" : "No"}</td>
+                                            </>
                                         ) : (
-                                            <div className="edit_actions">
-                                                <img src={accept} alt='' onClick={() => handleSaveEdit(user.id)}></img>
-                                                <img src={close} alt='' onClick={handleCancelEdit}></img>
-                                            </div>
+                                            <>
+                                                <td className='editable'>
+                                                    <input
+                                                        type="text"
+                                                        value={editUserName}
+                                                        onChange={(e) => setEditUserName(e.target.value)}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter') handleSaveEdit(user.id);
+                                                            if (e.key === 'Escape') handleCancelEdit();
+                                                        }}
+                                                    />
+                                                </td>
+                                                <td className='editable'>
+                                                    <input
+                                                        type="email"
+                                                        value={editUserEmail}
+                                                        onChange={(e) => setEditUserEmail(e.target.value)}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter') handleSaveEdit(user.id);
+                                                            if (e.key === 'Escape') handleCancelEdit();
+                                                        }}
+                                                    />
+                                                </td>
+                                                <td className='editable'>
+                                                    <input
+                                                        type="text"
+                                                        value={editPassword}
+                                                        onChange={(e) => setEditPassword(e.target.value)}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter') handleSaveEdit(user.id);
+                                                            if (e.key === 'Escape') handleCancelEdit();
+                                                        }}
+                                                    />
+                                                </td>
+                                                <td>{user.is_logged_in ? "Yes" : "No"}</td> {/* Login status not editable */}
+                                            </>
                                         )}
-                                    </td>
-                                </tr>
-                            )
-                        })}
+                                        <td className='actions'>
+                                            {!isEditing ? (
+                                                <div className="action_menu_container">
+                                                    <span className="edit_option" onClick={(e) => toggleMenu(user.id, e)}> <img src={Edit} alt="" /> </span>
 
-                    </tbody>
-                </table>
+                                                    {openMenuId === user.id && createPortal(
+                                                        <div
+                                                            className={`dropdown_menu show`}
+                                                            style={{
+                                                                position: 'fixed',
+                                                                left: `${menuPosition.left}px`,
+                                                                top: `${menuPosition.top}px`,
+                                                                zIndex: 998
+                                                            }}
+                                                        >
+                                                            <button onClick={() => handleEdit(user)} style={{ borderBottom: "1px solid grey" }}>Edit</button>
+                                                            <button onClick={() => deleteConfirmationPopup(user)}>Delete</button>
+                                                        </div>,
+                                                        document.body
+                                                    )}
+
+                                                </div>
+                                            ) : (
+                                                <div className="edit_actions">
+                                                    <img src={accept} alt='' onClick={() => handleSaveEdit(user.id)}></img>
+                                                    <img src={close} alt='' onClick={handleCancelEdit}></img>
+                                                </div>
+                                            )}
+                                        </td>
+                                    </tr>
+                                )
+                            })}
+
+                        </tbody>
+                    </table>
+                </div>
             )
                 :
                 (
@@ -345,6 +348,21 @@ function AddUserDatabase({ onClose, fetchData }) {
     const [userEmail, setUserEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [activeFields, setActiveFields] = useState({
+        name: false,
+        email: false,
+        password: false
+    });
+
+    const handleFocus = (field) => {
+        setActiveFields(prev => ({ ...prev, [field]: true }));
+    };
+
+    const handleBlur = (field, value) => {
+        if (value.trim() === '') {
+            setActiveFields(prev => ({ ...prev, [field]: false }));
+        }
+    };
 
     const validateEmail = (email) => {
         // simple regex for email validation
@@ -407,35 +425,40 @@ function AddUserDatabase({ onClose, fetchData }) {
 
                 <form onSubmit={handleSubmit}>
                     <div className="name_and_email">
-                        <div className="name_div">
+                        <div className={`name_div ${activeFields.name ? 'label-floated' : ''}`}>
                             <input
                                 type="text"
-                                // placeholder="User Name"
+                                placeholder=" "
                                 value={userName}
                                 onChange={(e) => setUserName(e.target.value)}
+                                onFocus={() => handleFocus('name')}
+                                onBlur={() => handleBlur('name', userName)}
                                 required
                             />
                             <span className='username'>User Name</span>
                         </div>
 
-                        <div className="email_div">
+                        <div className={`email_div ${activeFields.email ? 'label-floated' : ''}`}>
                             <input
                                 type="email"
-                                // placeholder="Email"
+                                placeholder=" "
                                 value={userEmail}
                                 onChange={(e) => setUserEmail(e.target.value)}
+                                onFocus={() => handleFocus('email')}
+                                onBlur={() => handleBlur('email', userEmail)}
                                 required
                             />
                             <span className='email'>Email</span>
                         </div>
                     </div>
-                    <div className="password">
-
+                    <div className={`password ${activeFields.password ? 'label-floated' : ''}`}>
                         <input
                             type="password"
-                            // placeholder="Password"
+                            placeholder=" "
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            onFocus={() => handleFocus('password')}
+                            onBlur={() => handleBlur('password', password)}
                             required
                         />
                         <span>Password</span>

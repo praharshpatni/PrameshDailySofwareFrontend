@@ -8,7 +8,8 @@ export default function Sidebar({ onSelectModule, activeModule, isPinned, setIsP
             case 'Analysis': return '64px';
             case 'Pramesh': return '128px';
             case 'FFL': return '188px';
-            case 'FD': return '248px';
+            case 'RealValue': return '248px';
+            case 'FD': return '307px';
             default: return '0px';
         }
     };
@@ -61,9 +62,16 @@ export default function Sidebar({ onSelectModule, activeModule, isPinned, setIsP
                         FFL
                     </button>
                     <button
+                        onClick={() => onSelectModule('RealValue')}
+                        className={`sidebar-item ${activeModule === 'RealValue' ? 'selected' : ''}`}
+                        title='Shortcut: alt + 4'
+                    >
+                        RealValue
+                    </button>
+                    <button
                         onClick={() => onSelectModule('FD')}
                         className={`sidebar-item ${activeModule === 'FD' ? 'selected' : ''}`}
-                        title='Shortcut: alt + 4'
+                        title='Shortcut: alt + 5'
                     >
                         FD
                     </button>
@@ -91,7 +99,13 @@ export default function Sidebar({ onSelectModule, activeModule, isPinned, setIsP
                         F
                     </div>
                     <div
-                        className={`unpinned_fourth ${activeModule === 'FD' ? 'selected' : ''}`}
+                        className={`unpinned_fourth ${activeModule === 'Real Value' ? 'selected' : ''}`}
+                        onClick={() => onSelectModule('RealValue')}
+                    >
+                        RV
+                    </div>
+                    <div
+                        className={`unpinned_fifth ${activeModule === 'FD' ? 'selected' : ''}`}
                         onClick={() => onSelectModule('FD')}
                     >
                         FD

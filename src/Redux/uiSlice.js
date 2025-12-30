@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    activeSubmodule: '',
+    activeSubmodule: 'KYC',
 };
 
 const uiSlice = createSlice({

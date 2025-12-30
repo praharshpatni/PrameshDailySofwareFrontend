@@ -12,12 +12,15 @@ import {
     FaUserCircle,
     FaEdit
 } from 'react-icons/fa';
+import { FcApproval } from "react-icons/fc";
 import useFilteredRowsByRM from '../../hooks/useFilteredRowsByRM';
 import { useNavigate } from 'react-router-dom';
 import CommissionCounter from './CommissionCounter';
 import EditPassword from "./EditPassword"
 import ImportExcel from "./ImportExcel "
+import ApproveUser from './ApproveUser';
 import PrameshLogo from './../../Assets/Pramesh Logo.png';
+import RaisedQuerySection from './RaisedQuerySection';
 
 const SettingsPage = () => {
     const [activeTab, setActiveTab] = useState('userprofile');
@@ -47,8 +50,12 @@ const SettingsPage = () => {
                 return 190;
             case 'edit_password':
                 return 248;
+            case 'approve_user':
+                return 310;
             case 'filtermod':
                 return 290;
+            case 'raisedQuery':
+                return 370;
             default:
                 return 0;
         }
@@ -185,6 +192,10 @@ const SettingsPage = () => {
                 return <CommissionCounter />;
             case 'edit_password':
                 return <EditPassword />;
+            case 'approve_user':
+                return <ApproveUser />
+            case 'raisedQuery':
+                return <RaisedQuerySection />
             default:
                 return null;
         }
@@ -244,6 +255,15 @@ const SettingsPage = () => {
                             <FaEdit style={{ marginRight: '7px' }} /> Edit ID Password
                         </button>
                     )}
+                    {isUnrestricted && allowedCommissionEmails.includes(currentUser?.email) && (
+                        <button
+                            className={`tab-button ${activeTab === 'approve_user' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('approve_user')}
+                        >
+                            <FcApproval style={{ marginRight: '7px' }} /> Approve User
+                        </button>
+                    )}
+
                 </div>
 
                 <div className="settings-content">{renderContent()}</div>

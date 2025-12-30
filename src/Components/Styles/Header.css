@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 
 .header {
     top: 0;
@@ -6,12 +7,22 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    padding: 10px;
     background-color: var(--primary-color, #f8f9fa);
     color: white;
     position: sticky;
     z-index: 1000;
-    height: 50px;
+    height: 70px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.profile_notify_con {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-right: 15px;
 }
 
 .header-controls {
@@ -33,74 +44,370 @@
     font-family: "Nunito", sans-serif;
 }
 
-.search-container {
-    display: flex;
-    justify-content: center;
-    position: relative;
-    flex: 1;
-    max-width: 600px;
-    margin: 0 20px;
-}
-
-.search-input {
-    width: 100%;
-    max-width: 500px;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: 1px solid #dfe1e5;
-    border-radius: 999px;
-    outline: none;
-    background-color: white;
-    box-shadow: 0 1px 6px rgba(32, 33, 36, 0.1);
-    transition: box-shadow 0.2s ease-in-out;
-    font-family: Arial, sans-serif;
-}
-
-.search-input:focus {
-    box-shadow: 0 1px 8px rgba(32, 33, 36, 0.2);
-    border-color: #dfe1e5;
-}
-
-.search-results {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #dfe1e5;
-    border-radius: 8px;
-    max-height: 300px;
-    overflow-y: auto;
-    z-index: 1000;
-    margin-top: 4px;
-    box-shadow: 0 2px 8px rgba(32, 33, 36, 0.15);
-}
-
-.search-result-item {
-    padding: 12px 20px;
-    font-size: 14px;
-    color: #202124;
-    font-family: Arial, sans-serif;
-    border-bottom: 1px solid #f1f3f4;
-    cursor: pointer;
-}
-
-.search-result-item:hover {
-    background-color: #f8f9fa;
-}
 
 .settings-button {
     background: transparent;
+    padding: 0;
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5rem;
     cursor: pointer;
     color: white;
-    transition: color 0.2s;
+    transition: all 200ms ease;
 }
 
 .settings-button:hover {
-    color: #e8eaed;
+    scale: 1.01;
+    filter: drop-shadow(0px 0px 10px #3a3a3a);
+}
+
+/* ==============================
+   NOTIFICATION STYLING
+============================== */
+
+.notification_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    backdrop-filter: blur(4px);
+}
+
+.notification_group {
+    margin-bottom: 12px;
+}
+
+.notification_group_header {
+    background-color: #f4f6fa;
+    padding: 6px 18px;
+    border-left: 4px solid #4e9af1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.notification_group_header h4 {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.notify_con {
+    position: relative;
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: all 200ms ease;
+}
+
+.notify_con .chat_icon:active {
+    animation: spong 300ms ease;
+}
+
+@keyframes spong {
+    from {
+        transform: scale(0.9);
+    }
+
+    to {
+        transform: scale(1.1);
+    }
+}
+
+.raise_ticket {
+    border: 1px solid white;
+    background-color: transparent;
+    color: white;
+    border-radius: 30px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all 100ms ease-out;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: "Ubuntu", sans-serif;
+}
+
+.raise_ticket:hover {
+    background-color: #ececec2d;
+}
+
+.raise_ticket:active {
+    transform: scale(0.99);
+}
+
+.notification_overlay.visible {
+    opacity: 1;
+}
+
+.notification_con {
+    position: fixed;
+    right: 0;
+    top: 70px;
+    height: calc(100vh - 70px);
+    width: 28%;
+    max-width: 420px;
+    background-color: #fff;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.4s ease;
+    box-shadow: -4px 0 18px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.notification_con.open {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* Header */
+.notification_header {
+    padding: 18px 20px;
+    border-bottom: 1px solid #eee;
+    background: linear-gradient(to right, #ffffff, #f9fafc);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+}
+
+.notification_header h2 {
+    font-size: 1.1rem;
+    color: #111;
+    margin: 0;
+    font-weight: 600;
+}
+
+.current_date {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.notification_close_btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification_close_btn:hover {
+    background-color: rgba(0, 0, 0, 0.07);
+}
+
+.notification_list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 0;
+}
+
+/* Each Notification Item */
+.notification_item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #f0f0f0;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.notification_item:hover {
+    background-color: #fafafa;
+}
+
+.notification_item.new {
+    background-color: #f8f9ff;
+}
+
+/* Avatar Circle like Instagram / WhatsApp */
+.notification_avatar {
+    flex-shrink: 0;
+}
+
+.avatar_circle {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6c63ff, #4e9af1);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+/* Notification content */
+.notification_content {
+    flex: 1;
+}
+
+.notif_text {
+    color: #222;
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.4;
+}
+
+.notif_text .highlight {
+    color: #4e9af1;
+    font-weight: 500;
+}
+
+.notif_time {
+    margin-top: 4px;
+    font-size: 0.78rem;
+    color: #888;
+}
+
+/* "New" indicator dot like Instagram */
+.new_dot {
+    position: absolute;
+    top: 20px;
+    right: 18px;
+    width: 10px;
+    height: 10px;
+    background: #4e9af1;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #4e9af1;
+    animation: pulseDot 1.8s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.4);
+        opacity: 0.6;
+    }
+}
+
+/* No notifications */
+.no_notifications {
+    padding: 50px 20px;
+    text-align: center;
+    color: #888;
+    font-size: 0.95rem;
+}
+
+/* Scrollbar */
+.notification_list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notification_list::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .notification_con {
+        width: 100%;
+        top: 0;
+        height: 100vh;
+        border-radius: 0;
+    }
+}
+
+/* chating css  */
+.chat_box {
+    position: relative;
+    background-color: transparent;
+    border-radius: 30px;
+    transition: all 200ms ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat_icon:hover {
+    filter: drop-shadow(0 0 8px lightgreen);
+}
+
+.custom-tooltip {
+    position: absolute;
+    font-family: "Poppins", sans-serif;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f1f1feb;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 1000;
+    pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.custom-tooltip::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent transparent #1f1f1feb transparent;
+}
+
+.chat_box:hover .custom-tooltip,
+.notify_con:hover .custom-tooltip,
+.settings-button:hover .custom-tooltip {
+    opacity: 1;
+    visibility: visible;
+    margin-bottom: 12px;
+}
+
+.chat_box:hover .chat_icon {
+    scale: 1.01;
+}
+
+.chat_icon {
+    color: white;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: all 200ms ease-in;
 }

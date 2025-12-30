@@ -26,11 +26,13 @@ export default function MainContent({ activeModule, isSidebarPinned }) {
     const [allTableData, setAllTableData] = useState({});
     const menuRef = useRef(null);
     const socket = useRef(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const submodules = useMemo(() => ({
-        Pramesh: ['KYC', 'Transaction', 'STP_Switch', 'Non_Financial', 'NSE_Pramesh', 'Realvalue'],
+        Pramesh: ['KYC', 'Transaction', 'STP_Switch', 'Non_Financial', 'NSE_Pramesh'],
         FFL: ['FFL_Transaction', 'FFL_STP_Switch', 'FFL_Non_Financial', 'NSE_FFL'],
         FD: ['FD'],
+        RealValue: ['RV_Transaction', 'RV_NSE', 'RV_Non_Financial', 'RV_STP_Switch'],
         Analysis: ['Chart Generator', 'SQL Terminal']
     }), []);
 
@@ -88,6 +90,11 @@ export default function MainContent({ activeModule, isSidebarPinned }) {
                 s: 'FFL_STP_Switch',
                 d: 'FFL_Non_Financial',
                 f: 'NSE_FFL',
+                x: 'RV_Transaction',
+                c: 'RV_NSE',
+                v: 'RV_Non_Financial',
+                b: 'RV_STP_Switch',
+
                 '1': 'Chart Generator',
                 '2': 'SQL Terminal'
             };
@@ -114,9 +121,8 @@ export default function MainContent({ activeModule, isSidebarPinned }) {
             setShowDeletePopup(false);
             return;
         }
-
         let updatedAllTableData = { ...allTableData };
-
+        setIsDeleting(true);
         try {
             const res = await fetch(`${Server_url}/api/deleteSelectedRows`, {
                 method: "DELETE",
@@ -127,23 +133,21 @@ export default function MainContent({ activeModule, isSidebarPinned }) {
                     deleted_by: currentUser?.name || "Unknown"
                 })
             });
-
             const result = await res.json();
             if (!res.ok) throw new Error(result.message);
-
             updatedAllTableData[tableName] = (updatedAllTableData[tableName] || []).filter(
                 row => !ids.includes(row.id)
             );
+            showSuccessToast("Rows deleted Successfully");
+            setShowDeletePopup(false);
+            setDeleteData(prev => ({ ...prev, [tableName]: [] }));
+            setAllTableData(updatedAllTableData);
         } catch (err) {
             console.error(`Failed to delete from ${tableName}:`, err);
             showErrorToast(`Delete failed for ${tableName}`);
-            return;
+        } finally {
+            setIsDeleting(false);
         }
-
-        showSuccessToast("Rows deleted Successfully");
-        setShowDeletePopup(false);
-        setDeleteData(prev => ({ ...prev, [tableName]: [] }));
-        setAllTableData(updatedAllTableData);
     };
 
     const renderDeleteConfirmBox = () => {
@@ -179,7 +183,13 @@ export default function MainContent({ activeModule, isSidebarPinned }) {
                         </div>
                     </div>
                     <div className="confirm-buttons">
-                        <button className="confirm-btn" onClick={handleDeleteData}>Confirm Delete</button>
+                        <button
+                            className="confirm-btn"
+                            onClick={handleDeleteData}
+                            disabled={isDeleting}
+                        >
+                            {isDeleting ? 'Deleting...' : 'Confirm Delete'}
+                        </button>
                         <button className="cancel-btn" onClick={() => setShowDeletePopup(false)}>Cancel</button>
                     </div>
                 </div>
@@ -202,6 +212,22 @@ export default function MainContent({ activeModule, isSidebarPinned }) {
             console.error("❌ Failed to log download:", err);
         }
     };
+    // const handleExportExcel = async () => {
+    //     const data = allTableData[activeSubmodule] || [];
+    //     if (!data.length) return showInfoToast("⚠️ No data to export.");
+
+    //     await logDownload("excel");
+
+    //     const headers = Object.keys(data[0]).filter(key => key !== 'id');
+    //     const exportData = data.map(({ id, ...row }) => row);
+    //     const worksheet = XLSX.utils.json_to_sheet(exportData, { header: headers });
+    //     const workbook = XLSX.utils.book_new();
+    //     XLSX.utils.book_append_sheet(workbook, worksheet, activeSubmodule);
+
+    //     const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    //     const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    //     saveAs(blob, `${activeSubmodule}_data.xlsx`);
+    // };
 
     const handleExportExcel = async () => {
         const data = allTableData[activeSubmodule] || [];
@@ -209,15 +235,57 @@ export default function MainContent({ activeModule, isSidebarPinned }) {
 
         await logDownload("excel");
 
-        const headers = Object.keys(data[0]).filter(key => key !== 'id');
-        const exportData = data.map(({ id, ...row }) => row);
-        const worksheet = XLSX.utils.json_to_sheet(exportData, { header: headers });
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, activeSubmodule);
+        const headers = Object.keys(data[0]).filter(k => k !== 'id');
 
-        const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-        const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-        saveAs(blob, `${activeSubmodule}_data.xlsx`);
+        const exportData = [...data].sort((a, b) => {
+            // 1️⃣ Received_Date
+            const rdA = new Date(a.Received_Date);
+            const rdB = new Date(b.Received_Date);
+
+            if (!isNaN(rdA) && !isNaN(rdB) && rdA.getTime() !== rdB.getTime()) {
+                return rdA - rdB;
+            }
+
+            // 2️⃣ created_date (VERY IMPORTANT)
+            const cdA = new Date(a.created_date);
+            const cdB = new Date(b.created_date);
+
+            if (!isNaN(cdA) && !isNaN(cdB) && cdA.getTime() !== cdB.getTime()) {
+                return cdA - cdB;
+            }
+
+            // 3️⃣ id (FINAL GUARANTEE – never flip)
+            return a.id - b.id;
+        }).map(({ id, ...row }) => row);
+
+        const worksheet = XLSX.utils.json_to_sheet(exportData, { header: headers });
+
+        // Date formatting
+        const dateFields = headers.filter(h => h.toLowerCase().includes("date"));
+        const range = XLSX.utils.decode_range(worksheet["!ref"]);
+
+        for (let R = range.s.r + 1; R <= range.e.r; R++) {
+            for (const field of dateFields) {
+                const col = headers.indexOf(field);
+                if (col === -1) continue;
+
+                const cell = worksheet[XLSX.utils.encode_col(col) + (R + 1)];
+                if (cell?.v) {
+                    const d = new Date(cell.v);
+                    if (!isNaN(d)) {
+                        cell.v = d;
+                        cell.t = "d";
+                        cell.z = "dd-mm-yyyy";
+                    }
+                }
+            }
+        }
+
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, worksheet, activeSubmodule);
+
+        const buffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        saveAs(new Blob([buffer]), `${activeSubmodule}_data.xlsx`);
     };
 
     const handleExportPDF = async () => {
@@ -226,19 +294,61 @@ export default function MainContent({ activeModule, isSidebarPinned }) {
 
         await logDownload("pdf");
 
-        const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
-        const headers = Object.keys(data[0]).filter(key => key !== "id");
-        const body = data.map(row => headers.map(h => (row[h] ?? "").toString()));
+        const headers = Object.keys(data[0]).filter(k => k !== "id");
+        const dateFields = headers.filter(h => h.toLowerCase().includes("date"));
+
+        // 🔒 STABLE SORT (same logic as Excel)
+        const sortedData = [...data].sort((a, b) => {
+
+            // 1️⃣ Received_Date (primary)
+            const rdA = new Date(a.Received_Date);
+            const rdB = new Date(b.Received_Date);
+
+            if (!isNaN(rdA) && !isNaN(rdB) && rdA.getTime() !== rdB.getTime()) {
+                return rdA - rdB;
+            }
+
+            // 2️⃣ created_date (secondary)
+            const cdA = new Date(a.created_date);
+            const cdB = new Date(b.created_date);
+
+            if (!isNaN(cdA) && !isNaN(cdB) && cdA.getTime() !== cdB.getTime()) {
+                return cdA - cdB;
+            }
+
+            // 3️⃣ id (final lock → NEVER flips)
+            return a.id - b.id;
+        });
+
+        // Helper: date → dd-mm-yyyy
+        const formatDate = (value) => {
+            if (!value) return "";
+            const d = new Date(value);
+            if (isNaN(d)) return value;
+            return `${String(d.getDate()).padStart(2, "0")}-${String(d.getMonth() + 1).padStart(2, "0")}-${d.getFullYear()}`;
+        };
+
+        // Headers with index
+        const exportHeaders = ["Index", ...headers];
+
+        // Body (NO sorting here)
+        const body = sortedData.map((row, index) =>
+            exportHeaders.map(h => {
+                if (h === "Index") return (index + 1).toString();
+                if (dateFields.includes(h)) return formatDate(row[h]);
+                return (row[h] ?? "").toString();
+            })
+        );
+
+        const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
         doc.text(`${activeSubmodule} Data Export`, 8, 10);
 
         autoTable(doc, {
             startY: 14,
-            head: [headers],
+            head: [exportHeaders],
             body,
-            styles: { fontSize: 7, cellPadding: 1, overflow: 'linebreak' },
-            headStyles: { fillColor: [75, 137, 220], textColor: 255, halign: 'center' },
-            margin: { top: 10, bottom: 10, left: 5, right: 5 },
-            theme: 'grid'
+            styles: { fontSize: 7, cellPadding: 1 },
+            theme: "grid"
         });
 
         doc.save(`${activeSubmodule}_data.pdf`);

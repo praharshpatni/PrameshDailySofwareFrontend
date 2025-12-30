@@ -84,20 +84,20 @@
 }
 
 .settings-content {
-    height: calc(100vh - 120px);
-    padding: 15px 5px 15px 30px;
+    height: calc(100vh - 100px);
+    padding: 15px 5px 15px 15px;
     width: calc(100% - 250px);
 }
 
 .settings-page .settings-segment {
-    width: 100%;
-    max-height: calc(100vh - 110px);
+    width: 99%;
+    padding: 0px 0px 0px 10px;
+    height: 100vh;
+    max-height: calc(100vh - 100px);
     overflow-y: auto;
     color: white;
     scrollbar-width: thin;
-    /* For Firefox */
     scrollbar-color: transparent transparent;
-    /* Hide scrollbar by default in Firefox */
 }
 
 .settings-page .settings-segment:hover {
@@ -397,13 +397,12 @@
     background-color: #c62828;
 }
 
-/* for excel file upload  */
-
 .import-excel-wrapper {
-    height: 99%;
+    position: relative;
+    height: 100%;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     flex-direction: column;
     gap: 20px;
     color: white;
@@ -419,13 +418,25 @@
 
 
 .import-excel-wrapper h3 {
-    font-size: 2rem;
+    font-size: 1rem;
     font-weight: 500;
     margin: 0;
 }
 
+.selection_container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+}
+
+.selection_container label {
+    width: 15%;
+}
+
 .selection_container select {
-    width: 100%;
+    margin-bottom: 0px;
+    width: 85%;
     padding: 10px 12px;
     border: 1px solid #d1d5db;
     border-radius: 8px;
@@ -439,7 +450,7 @@
 .selection_container,
 .upload_container {
     width: 100%;
-    max-width: 80%;
+    max-width: 70%;
 }
 
 .selection_container label {
@@ -447,7 +458,7 @@
 }
 
 .upload_container {
-    height: 80%;
+    height: 68%;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -528,4 +539,150 @@
     color: #303031;
     font-weight: 300;
     font-size: 14px;
+}
+
+.choose-file-btn {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    /* Green base */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    /* Smooth transition */
+}
+
+.choose-file-btn:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.choose-file-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+
+/* Import Mode Selection */
+.import-mode-options {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    flex: 1;
+}
+
+.mode-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0.5rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.mode-option:hover {
+    border-color: #007bff;
+    background: #f8f9fa;
+}
+
+.mode-option.active {
+    border-color: #007bff;
+    background: #e7f1ff;
+}
+
+.mode-option input[type="radio"] {
+    display: none;
+}
+
+.mode-icon {
+    font-size: 1.5rem;
+}
+
+.mode-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.mode-text strong {
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.mode-text small {
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 2px;
+}
+
+/* Override mode warning style when selected */
+.mode-option.active:has(input[value="override"]) {
+    border-color: #ffc107;
+    background: #fff8e1;
+}
+
+/* for excel file upload  */
+
+/* Import Result Info Box */
+.import-result-info {
+    padding: 0.6rem;
+    border-radius: 8px;
+    position: absolute;
+    top: 0px;
+    right: 10px;
+}
+
+.import-result-info.override-mode {
+    background: #f9f9f9;
+    border: 3px solid #ffc107;
+    color: #333;
+}
+
+.import-result-info.append-mode {
+    background: #f9f9f9;
+    border: 3px solid #28a745;
+    color: #333;
+}
+
+.import-result-info .result-title {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.import-result-info .result-details {
+    margin: 0.5rem 0 0 0;
+    font-size: 0.9rem;
+}
+
+@media screen and (max-width:1200px) {
+    .settings-tabs .tab-button {
+        font-size: 16px;
+    }
+
+    .settings-tabs {
+        width: 240px;
+    }
+
+    .settings-content {
+        height: calc(100vh - 120px);
+        padding: 15px 5px 15px 15px;
+        width: calc(100% - 250px);
+    }
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 500px) {
+    .import-mode-options {
+        flex-direction: column;
+    }
 }

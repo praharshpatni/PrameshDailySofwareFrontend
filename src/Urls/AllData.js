@@ -6,8 +6,15 @@ import 'react-toastify/dist/ReactToastify.css';
 // import { MdError } from "react-icons/md";
 
 // export const Server_url = "http://localhost:4000";
-export const Server_url = "http://192.168.0.162:4000";
-export const socket_url = "http://192.168.0.162:4000";
+// export const socket_url = "http://localhost:4000";
+// export const Server_url = "http://10.27.55.233:4000";
+// export const socket_url = "http://10.27.55.233:4000";
+export const Server_url = "http://192.168.0.192:4000";
+export const socket_url = "http://192.168.0.192:4000";
+// export const Server_url = "http://192.168.0.194:4000";
+// export const socket_url = "http://192.168.0.194:4000";
+// export const Server_url = "https://dataentry.prameshwealth.com";
+// export const socket_url = "https://dataentry.prameshwealth.com";
 // export const Server_url = "http://192.168.1.5:4000";
 // export const socket_url = "http://192.168.1.5:4000";
 // export const Server_url = process.env.REACT_APP_SERVER_URL;
@@ -16,11 +23,13 @@ export const socket_url = "http://192.168.0.162:4000";
 // AllData.js
 export const emailToRMMap = {
     'vishalvaidya@gmail.com': 'Vishal Vaidya',
-    'arpita@gmail.com': 'Arpita Parmar',
-    'prachi@gmail.com': 'Prachi Panchal'
+    "bhumika@prameshwealth.com": "Bhumika",
+    "happy@prameshwealth.com": "Happy",
+    "vinayak@prameshwealth.com": "Vinayak Shelar",
+    "navneet@prameshwealth.com": "Navneet Mishra"
 };
 
-export const unrestricted_adminEmails = ['admin@gmail.com', 'praharshpatni@gmail.com'];
+export const unrestricted_adminEmails = ['admin@gmail.com', 'praharsh@prameshwealth.com', 'prachi@prameshwealth.com', "krishna@prameshwealth.com", 'arpita@prameshwealth.com', "shweta@prameshwealth.com"];
 
 
 
@@ -62,7 +71,6 @@ export const showSuccessToast = (message) => {
         closeOnClick: true,
         pauseOnHover: true,
         draggable: false,
-        // icon: <MdCheckCircle color="#256029" size={20} />,
         style: {
             background: "#e6f4ea",
             color: "#256029",

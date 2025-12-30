@@ -5,13 +5,17 @@ import { useDropdowns } from '../Contexts/DropdownContext';
 import { useSelector } from 'react-redux';
 import { emailToRMMap, unrestricted_adminEmails, Server_url, showErrorToast, showInfoToast, showSuccessToast } from '../Urls/AllData'; // Added missing imports
 
-export default function SidebarAddRowForm({ allFields, defaultZeroFields, currentSubmodule, currentUser, onClose, onRowInserted }) {
+export default function SidebarAddRowForm({ allFields, defaultZeroFields, currentSubmodule, currentUser, onClose, onRowInserted, onRefresh }) {
     const [selectedSubmodule, setSelectedSubmodule] = useState(currentSubmodule);
     const [formData, setFormData] = useState({});
     const { dropdownFields } = useDropdowns();
-    const reduxCurrentUser = useSelector((state) => state.user?.currentUser); // Fallback if prop missing
+    const reduxCurrentUser = useSelector((state) => state.user?.currentUser);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const effectiveCurrentUser = currentUser || reduxCurrentUser;
+    const isAdmin = unrestricted_adminEmails.includes(effectiveCurrentUser?.email);
+    const currentRM = emailToRMMap?.[effectiveCurrentUser?.email] || "";
+
 
     useEffect(() => {
         const today = new Date().toISOString().split("T")[0];
@@ -21,18 +25,25 @@ export default function SidebarAddRowForm({ allFields, defaultZeroFields, curren
             if (
                 (lower.includes('received') && lower.includes('date')) ||
                 (lower.includes('proceed') && lower.includes('date')) ||
-                (field === 'Date' && ['NSE_Pramesh', 'NSE_FFL'].includes(selectedSubmodule))
+                (field === 'Date' && ['NSE_Pramesh', 'NSE_FFL', 'RV_NSE'].includes(selectedSubmodule))
             ) {
                 acc[field] = today;
             } else if (defaultZeroFields.includes(field)) {
                 acc[field] = '0';
-            } else {
+            } else if (field.toLowerCase() === 'captain') {
+                acc[field] = 'Prasad Parsekar'
+            }
+            else {
                 acc[field] = '';
             }
             return acc;
         }, {});
+
         setFormData(initialData);
-    }, [selectedSubmodule, allFields, defaultZeroFields]);
+        if (!isAdmin && initialData.hasOwnProperty("RM")) {
+            setFormData(prev => ({ ...prev, RM: currentRM }));
+        }
+    }, [selectedSubmodule, isAdmin, currentRM, allFields, defaultZeroFields]);
 
     if (!allFields || !allFields[selectedSubmodule]) {
         return (
@@ -50,7 +61,11 @@ export default function SidebarAddRowForm({ allFields, defaultZeroFields, curren
         setFormData(prev => ({ ...prev, [field]: value }));
     };
 
+    // to save form data to server
     const handleSubmit = async () => {
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
         try {
             if (!effectiveCurrentUser?.email) {
                 showInfoToast('⚠️ User email not found. Please log in again.');
@@ -59,9 +74,13 @@ export default function SidebarAddRowForm({ allFields, defaultZeroFields, curren
 
             const isAdmin = unrestricted_adminEmails.includes(effectiveCurrentUser.email);
             const currentRM = emailToRMMap?.[effectiveCurrentUser.email];
-            const selectedRM = (formData['RM'] || '').trim();
+            const selectedRM = isAdmin
+                ? (formData['RM'] || '').trim()
+                : currentRM.trim();
             const normalizedCurrentRM = currentRM?.trim().toLowerCase();
             const normalizedSelectedRM = selectedRM?.toLowerCase();
+
+            console.log("effective current user", effectiveCurrentUser.name, currentRM)
 
             if (!isAdmin && !normalizedCurrentRM) {
                 showInfoToast('Your email is not mapped to a valid RM. Contact support.');
@@ -81,7 +100,7 @@ export default function SidebarAddRowForm({ allFields, defaultZeroFields, curren
             // Prepare payload with created_by
             const payload = {
                 tableName: selectedSubmodule,
-                entries: [{ ...formData, created_by: effectiveCurrentUser?.name || 'Unknown' }],
+                entries: [{ ...formData, created_by: effectiveCurrentUser?.email || 'Unknown' }],
             };
 
             const response = await fetch(`${Server_url}/api/insertTableData`, {
@@ -95,20 +114,13 @@ export default function SidebarAddRowForm({ allFields, defaultZeroFields, curren
             if (!response.ok) {
                 throw new Error(result.message || `Insert failed with status ${response.status}`);
             }
-
-            const insertedRows = result.insertedRows || [];
-            const insertedRow = insertedRows[0] || { ...formData, id: Date.now() }; // Fallback for safety
-
-            // Notify parent to add row to UI with server data
-            if (typeof onRowInserted === 'function') {
-                onRowInserted(insertedRow);
-            }
-
             onClose();
             showSuccessToast('✅ Row inserted successfully.');
         } catch (err) {
             console.error('Insert error:', err.message);
             showErrorToast(`❌ Failed to insert row: ${err.message}`);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -123,8 +135,9 @@ export default function SidebarAddRowForm({ allFields, defaultZeroFields, curren
         return dropdownFields[field] || null;
     };
 
+
     return (
-        <div className="sidebar-form">
+        <div className="sidebar-form" onKeyDown={(e) => e.stopPropagation()}>
             <div className="sidebar-header">
                 <h3>Add Row in <span style={{ backgroundColor: "#faac4d", padding: "0px 5px" }}>{selectedSubmodule}</span></h3>
                 <button onClick={onClose}>✕</button>
@@ -144,7 +157,7 @@ export default function SidebarAddRowForm({ allFields, defaultZeroFields, curren
             <div className="form-fields">
                 {(allFields[selectedSubmodule] || []).map((field, index) => {
                     const isDateField = field.toLowerCase().includes('date') &&
-                        !['mandate', 'mandate_mode', 'mandate_sf', 'red_indicatores_update'].includes(field.toLowerCase());
+                        !['mandate', 'mandate_mode', 'mandate_sf'].includes(field.toLowerCase());
 
                     const isNumeric = defaultZeroFields.includes(field);
                     const dropdownOptions = getDropdownOptions(field);
@@ -153,15 +166,31 @@ export default function SidebarAddRowForm({ allFields, defaultZeroFields, curren
                         <div className="form-row" key={index}>
                             <label>{field}</label>
                             {dropdownOptions ? (
-                                <select value={formData[field] || ''} onChange={(e) => handleChange(field, e.target.value)}>
-                                    <option value="">Select</option>
-                                    {dropdownOptions.map((opt, i) => (
-                                        <option key={i} value={opt}>{opt}</option>
-                                    ))}
-                                    {formData[field] && !dropdownOptions.includes(formData[field]) && (
-                                        <option value={formData[field]}>{`Deleted: ${formData[field]}`}</option>
-                                    )}
-                                </select>
+                                field === "RM" && !isAdmin ? (
+                                    // 🔒 Restricted user → only their own RM visible
+                                    <select
+                                        value={formData[field] || currentRM}
+                                        onChange={(e) => handleChange(field, e.target.value)}
+                                        onKeyDown={(e) => e.stopPropagation()}
+                                    >
+                                        <option value={currentRM}>{currentRM}</option>
+                                    </select>
+                                ) : (
+                                    // 🔓 Admin → show full dropdown normally
+                                    <select
+                                        value={formData[field] || ''}
+                                        onChange={(e) => handleChange(field, e.target.value)}
+                                        onKeyDown={(e) => e.stopPropagation()}
+                                    >
+                                        <option value="">Select</option>
+                                        {dropdownOptions.map((opt, i) => (
+                                            <option key={i} value={opt}>{opt}</option>
+                                        ))}
+                                        {formData[field] && !dropdownOptions.includes(formData[field]) && (
+                                            <option value={formData[field]}>{`Deleted: ${formData[field]}`}</option>
+                                        )}
+                                    </select>
+                                )
                             ) : (
                                 <input
                                     type={
@@ -171,6 +200,7 @@ export default function SidebarAddRowForm({ allFields, defaultZeroFields, curren
                                     }
                                     value={formData[field] || ''}
                                     onChange={(e) => handleChange(field, e.target.value)}
+                                    onKeyDown={(e) => e.stopPropagation()}
                                 />
                             )}
                         </div>
@@ -179,7 +209,9 @@ export default function SidebarAddRowForm({ allFields, defaultZeroFields, curren
             </div>
 
             <div className="form-actions">
-                <button onClick={handleSubmit}>💾 Save</button>
+                <button onClick={handleSubmit} disabled={isSubmitting}>
+                    {isSubmitting ? 'Saving...' : 'Save'}
+                </button>
             </div>
         </div>
     );

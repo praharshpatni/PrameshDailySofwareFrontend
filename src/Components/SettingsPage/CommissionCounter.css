@@ -1,27 +1,77 @@
+/* commission table */
+.inline-highlight {
+    background: #febe63;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
 .commission-counter {
+    background: #fff;
+    height: 94%;
     padding: 20px;
-    background-color: transparent;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
-    width: 85%;
-    box-sizing: border-box;
-    height: 100%;
-    overflow-x: hidden;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    border-radius: 6px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 5px;
     overflow-y: scroll;
 }
 
+/* Base scrollbar container */
+.commission-counter::-webkit-scrollbar {
+    width: 4px;
+    transition: width 0.25s ease-in-out;
+}
+
+/* Track (background) */
+.commission-counter::-webkit-scrollbar-track {
+    background: rgba(180, 180, 180, 0.2);
+    border-radius: 10px;
+}
+
+/* Scrollbar Thumb */
+.commission-counter::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #414141, #565656);
+    border-radius: 10px;
+    transition: background 0.3s ease, width 0.25s ease-in-out;
+}
+
+/* Hover Effect – wider and highlighted */
+.commission-counter:hover::-webkit-scrollbar {
+    width: 7px;
+}
+
+.commission-counter:hover::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #414141, #565656);
+}
+
+
 .commission-counter h3 {
+    text-align: center;
     margin: 0;
     margin-bottom: 1rem;
     font-size: 1.5rem;
     color: #333;
 }
 
+.commission-counter h2 {
+    margin: 0;
+}
+
+.commission-counter .result-header {
+    margin-bottom: 5px;
+}
+
 .commission-counter label {
     display: block;
-    margin-top: 12px;
     font-weight: bold;
     color: #555;
+    margin: 10px 0 5px;
 }
 
 .commission-counter select,
@@ -30,21 +80,28 @@
     padding: 8px 10px;
     border-radius: 6px;
     border: 1px solid #ccc;
-    margin-top: 6px;
+    margin-block: 6px 10px;
     background-color: #fff;
+    font-size: 14px;
 }
 
 .commission-counter button {
     margin-top: 20px;
-    width: 100%;
-    padding: 10px 0;
+    padding: 15px 20px;
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 30px;
     cursor: pointer;
     font-weight: bold;
     transition: background 0.2s;
+    font-size: 14px;
+    margin: auto;
+    font-family: var(--count-entry-font);
+}
+
+.commission-counter button:hover {
+    background-color: #004c99;
 }
 
 .commission-counter table tbody tr:hover {
@@ -64,59 +121,13 @@
     margin: 4px 0;
 }
 
-/* commission table */
-
-.commission-counter {
-    background: #fff;
-    padding: 20px;
-    max-width: 1000px;
-    margin: 0 auto;
-    border-radius: 12px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-    font-family: 'Segoe UI', sans-serif;
-}
-
-.commission-counter h3 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #2b3e50;
-}
-
-.commission-counter label {
-    display: block;
-    margin: 10px 0 5px;
-    font-weight: 600;
-}
-
-.commission-counter select,
-.commission-counter input[type="date"] {
-    /* width: 100%; */
-    padding: 8px 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-    margin-bottom: 10px;
-}
-
-.commission-counter button {
-    background-color: #0066cc;
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    font-size: 14px;
-    border-radius: 6px;
-    margin-top: 10px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-/* .commission-counter button:hover {
-    background-color: #004c99;
-} */
 
 .result-table {
     margin-top: 30px;
-    overflow-x: auto;
+}
+
+.result-table .total_rows p {
+    margin-top: 0px;
 }
 
 .result-table table {
@@ -187,4 +198,350 @@
     flex-direction: column;
     align-items: center;
     gap: 10px;
+}
+
+@media screen and (max-width:1200px) {
+    .commission-counter {
+        width: 90%;
+        height: 95%;
+    }
+
+    .commission-counter button {
+        padding: 10px 15px;
+    }
+}
+
+
+
+/* new css  */
+
+/* Add these styles to your existing CSS file */
+
+.lumpsum-details {
+    margin-bottom: 30px;
+}
+
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.summary-card {
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border: 1px solid #e0e0e0;
+}
+
+.summary-card h4 {
+    margin: 0 0 10px 0;
+    color: #555;
+    font-size: 14px;
+}
+
+.summary-card .amount {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c387e;
+    margin: 5px 0;
+}
+
+.summary-card.highlight {
+    background: linear-gradient(135deg, #f8a9e2be 0%, #9a69cbcb 100%);
+    color: white;
+}
+
+.summary-card.highlight .amount {
+    color: white;
+}
+
+.summary-card.highlight small {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.commission-type-badge {
+    margin: 20px 0;
+}
+
+.badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.badge.rm {
+    background: #ff6b6b;
+    color: white;
+}
+
+.badge.non-rm {
+    background: #4ecdc4;
+    color: white;
+}
+
+.toggle-details-btn {
+    background: #4a5568;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+.toggle-details-btn:hover {
+    background: #2d3748;
+}
+
+.month-breakdown,
+.deduction-details,
+.overlapping-clients {
+    margin: 20px 0;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.breakdown-table,
+.deduction-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+
+.breakdown-table th,
+.deduction-table th {
+    background: #f8f9fa;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: bold;
+    color: #495057;
+}
+
+.breakdown-table td,
+.deduction-table td {
+    padding: 12px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.breakdown-table tr:hover,
+.deduction-table tr:hover {
+    background: #f8f9fa;
+}
+
+.below-threshold {
+    background: #fff5f5;
+}
+
+.deduction {
+    color: #e53e3e;
+    font-weight: bold;
+}
+
+.eligible {
+    color: #38a169;
+    font-weight: bold;
+}
+
+.not-eligible {
+    text-wrap: nowrap;
+    color: #a0aec0;
+}
+
+.commission-amount {
+    color: #2c387e;
+    font-weight: bold;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.status-badge.success {
+    background: #c6f6d5;
+    color: #22543d;
+}
+
+.status-badge.warning {
+    background: #fed7d7;
+    color: #742a2a;
+}
+
+.deduction-row {
+    background: #fff5f5;
+}
+
+.deduction-amount {
+    color: #e53e3e;
+    font-weight: bold;
+}
+
+.deduction-badge {
+    background: #fed7d7;
+    color: #742a2a;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.client-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.client-tag {
+    background: #e2e8f0;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #4a5568;
+}
+
+.transactions-section {
+    margin-top: 30px;
+}
+
+.transactions-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+
+.transactions-table th {
+    background: #2c387e;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+.transactions-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.input-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 14px;
+    align-items: end;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-group select,
+.form-group input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.calculate-btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    grid-column: span 1;
+}
+
+.calculate-btn:hover {
+    background: #45a049;
+}
+
+.calculate-btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+}
+
+.export-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.export-btn {
+    display: flex;
+    align-items: center;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.2s;
+}
+
+.export-btn:hover {
+    transform: translateY(-2px);
+}
+
+.export-btn.excel {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #4caf50;
+}
+
+.export-btn.pdf {
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #f44336;
+}
+
+.note {
+    color: #666;
+    font-style: italic;
+    margin: 10px 0;
+}
+
+.commission-counter .loading-spinner {
+    display: inline-block;
+    width: 3em;
+    height: 3em;
+    border: 2px solid #4585cf;
+    border-radius: 50%;
+    border-top-color: transparent;
+    /* background-color: rebeccapurple; */
+    /* animation: spin 1s ease-in-out infinite; */
+    margin: auto;
+
+}
+
+.commission-amount.negative {
+    color: red;
+    font-weight: bold;
+}
+
+.status-badge.danger {
+    background-color: #e74c3c;
+    color: white;
+    /* text-wrap: nowrap; */
 }

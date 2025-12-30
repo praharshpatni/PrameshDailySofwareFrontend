@@ -9,25 +9,25 @@ import React, {
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../Redux/UserSlice";
 import { Server_url } from "../Urls/AllData";
-import "./useInactivityLogout.css"
-import inactivityWarning from "./../Assets/inactivityWarning.png"
+import "./useInactivityLogout.css";
+import inactivityWarning from "./../Assets/inactivityWarning.png";
 
-// Timeout threshold (30 seconds)
-const INACTIVITY_LIMIT = 30 * 60 * 1000;
+// Timers
+const INACTIVITY_WARNING = 30 * 60 * 1000; // 1 minute -> show modal
+const INACTIVITY_LOGOUT = 60 * 60 * 1000;  // 2 minutes -> auto logout
 
 // --- Context Setup for Modal ---
 const InactivityContext = createContext();
-
 export const useInactivityModal = () => useContext(InactivityContext);
 
 export const InactivityProvider = ({ children }) => {
     const [isVisible, setIsVisible] = useState(false);
-    const [onConfirm, setOnConfirm] = useState(null);
-    const [onCancel, setOnCancel] = useState(null);
+    const onConfirmRef = useRef(null);
+    const onCancelRef = useRef(null);
 
     const showModal = (confirmFn, cancelFn) => {
-        setOnConfirm(() => confirmFn);
-        setOnCancel(() => cancelFn);
+        onConfirmRef.current = confirmFn;
+        onCancelRef.current = cancelFn;
         setIsVisible(true);
     };
 
@@ -41,13 +41,13 @@ export const InactivityProvider = ({ children }) => {
             {isVisible && (
                 <div className="modal-overlay">
                     <div className="modal">
-                        <img src={inactivityWarning} alt="" />
+                        <img src={inactivityWarning} alt="Inactivity warning" />
                         <h2>Session Timeout</h2>
                         <p>You’ve been inactive. Do you want to stay logged in?</p>
                         <div className="modal-buttons">
                             <button
                                 onClick={() => {
-                                    onConfirm?.();
+                                    try { onConfirmRef.current?.(); } catch (e) { console.error(e); }
                                     hideModal();
                                 }}
                             >
@@ -55,7 +55,7 @@ export const InactivityProvider = ({ children }) => {
                             </button>
                             <button
                                 onClick={() => {
-                                    onCancel?.();
+                                    try { onCancelRef.current?.(); } catch (e) { console.error(e); }
                                     hideModal();
                                 }}
                             >
@@ -73,86 +73,103 @@ export const InactivityProvider = ({ children }) => {
 const useInactivityLogout = () => {
     const dispatch = useDispatch();
     const currentUser = useSelector((state) => state.user.currentUser);
-    const { showModal } = useInactivityModal();
+    const { showModal, hideModal } = useInactivityModal();
 
-    const isActiveRef = useRef(true);
-    const inactivityTimeoutRef = useRef(null);
-    const markUserActiveRef = useRef(null);
-    const confirmBeforeLogoutRef = useRef(null);
+    // timer refs
+    const warningTimerRef = useRef(null);
+    const logoutTimerRef = useRef(null);
 
+    // keep currentUser stable in callbacks
+    const currentUserRef = useRef(currentUser);
+    useEffect(() => { currentUserRef.current = currentUser; }, [currentUser]);
+
+    // perform logout: server call + client cleanup
     const handleLogout = useCallback(async () => {
-        if (!currentUser) return;
+
         try {
-            const response = await fetch(`${Server_url}/logout`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: currentUser.email }),
-            });
-
-            if (response.ok) {
-                sessionStorage.removeItem("user");
-                dispatch(logoutUser());
-                window.location.reload();
+            const email = currentUserRef.current?.email;
+            if (email) {
+                await fetch(`${Server_url}/logout`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email }),
+                }).catch(e => console.error("Server logout failed:", e));
             }
-        } catch (error) {
-            console.error("Logout error:", error);
+        } catch (e) {
+            console.error("Logout error:", e);
+        } finally {
+            try { sessionStorage.removeItem("user"); } catch { }
+            dispatch(logoutUser());
+            window.location.reload();
         }
-    }, [currentUser, dispatch]);
+    }, [dispatch]);
 
-    const markUserActive = useCallback(() => {
-        if (!isActiveRef.current) {
-            isActiveRef.current = true;
+    const clearTimers = useCallback(() => {
+        if (warningTimerRef.current) {
+            clearTimeout(warningTimerRef.current);
+            warningTimerRef.current = null;
         }
-
-        clearTimeout(inactivityTimeoutRef.current);
-        inactivityTimeoutRef.current = setTimeout(() => {
-            if (isActiveRef.current) {
-                isActiveRef.current = false;
-            }
-
-            if (confirmBeforeLogoutRef.current) {
-                confirmBeforeLogoutRef.current();
-            }
-        }, INACTIVITY_LIMIT);
+        if (logoutTimerRef.current) {
+            clearTimeout(logoutTimerRef.current);
+            logoutTimerRef.current = null;
+        }
     }, []);
 
-    const confirmBeforeLogout = useCallback(() => {
-        if (!currentUser) return;
+    // schedule the warning modal and the final logout
+    const scheduleTimers = useCallback(() => {
+        clearTimers();
 
-        showModal(
-            () => {
-                // Stay logged in
-                markUserActiveRef.current?.();
-            },
-            () => {
-                // Logout
+        // when warning timer fires, show modal and schedule final logout
+        warningTimerRef.current = setTimeout(() => {
+            showModal(
+                () => {
+                    clearTimers();
+                    scheduleTimers();
+                },
+                () => {
+                    clearTimers();
+                    handleLogout();
+                }
+            );
+
+            const remaining = INACTIVITY_LOGOUT - INACTIVITY_WARNING;
+            if (remaining > 0) {
+                logoutTimerRef.current = setTimeout(() => {
+                    hideModal();
+                    handleLogout();
+                }, remaining);
+            } else {
+                hideModal();
                 handleLogout();
             }
-        );
-    }, [currentUser, handleLogout, showModal]);
+        }, INACTIVITY_WARNING);
+    }, [clearTimers, showModal, hideModal, handleLogout]);
 
+    // resets timers on activity
+    const markUserActive = useCallback(() => {
+        scheduleTimers();
+    }, [scheduleTimers]);
+
+    // attach event listeners when user logged in
     useEffect(() => {
-        confirmBeforeLogoutRef.current = confirmBeforeLogout;
-        markUserActiveRef.current = markUserActive;
-    }, [confirmBeforeLogout, markUserActive]);
+        if (!currentUser) {
+            clearTimers();
+            return;
+        }
 
-    useEffect(() => {
-        if (!currentUser) return;
+        const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];
+        const handler = () => markUserActive();
 
-        const events = ["mousemove", "keydown", "click", "scroll"];
-        events.forEach((event) =>
-            window.addEventListener(event, markUserActive)
-        );
+        events.forEach(e => window.addEventListener(e, handler, { passive: true }));
 
-        markUserActive(); // Start timer immediately
+        // start timers immediately when user is present
+        scheduleTimers();
 
         return () => {
-            events.forEach((event) =>
-                window.removeEventListener(event, markUserActive)
-            );
-            clearTimeout(inactivityTimeoutRef.current);
+            events.forEach(e => window.removeEventListener(e, handler));
+            clearTimers();
         };
-    }, [currentUser, markUserActive]);
+    }, [currentUser, markUserActive, scheduleTimers, clearTimers]);
 };
 
 export default useInactivityLogout;

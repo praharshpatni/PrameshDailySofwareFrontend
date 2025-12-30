@@ -295,20 +295,24 @@
 }
 
 .confirm-delete-box {
-    padding: 16px;
-    background: #2e2e2e;
+    padding: 25px 16px;
+    background: #393939;
     border-radius: 20px;
     position: absolute;
-    min-height: 250px;
-    width: 350px;
+    height: fit-content;
+    width: 320px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     flex-direction: column;
     animation: fadeOut 200ms linear;
+}
+
+.dropdown_details {
+    line-height: 1.7rem;
 }
 
 @keyframes fadeOut {
@@ -329,7 +333,9 @@
 }
 
 .delete_button_container {
-    margin-top: 20px;
+    margin-top: 10px;
+    display: flex;
+    align-self: end;
 }
 
 .confirm-delete-box div {
@@ -344,22 +350,23 @@
 }
 
 .confirm-delete-box button {
-    padding: 8px 16px;
+    padding: 10px 20px;
     font-size: 0.875rem;
     font-weight: 500;
-    border-radius: 6px;
+    border-radius: 30px;
     border: none;
     transition: background 0.2s ease;
 }
 
 .confirm-delete-box button:first-of-type {
-    background: #10b981;
+    background: transparent;
+    border: 1px solid white;
     color: #ffffff;
-    margin-right: 8px;
+    margin-right: 14px;
 }
 
 .confirm-delete-box button:first-of-type:hover {
-    background: #059669;
+    background: #ffffff15;
 }
 
 .confirm-delete-box button:last-of-type {

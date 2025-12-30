@@ -111,7 +111,7 @@ export default function ChartGenerator() {
 
     const handleClientStats = async () => {
         try {
-            const res = await axios.post(`${Server_url}/api/client-stats`, { month: monthForClientStats });
+            const res = await axios.post(`${Server_url}/api/client-stats`, { month: monthForClientStats, email: currentUserEmail?.email });
             setClientChartData(res.data.chart);
             setClientRawStats(res.data.rawData);
             setChartData(null);
@@ -147,18 +147,6 @@ export default function ChartGenerator() {
         if (btn) btn.style.display = 'block';
     };
 
-    // const calculateTotalAmount = (amountInfo) => {
-    //     const total = (
-    //         (amountInfo?.newSIP || 0) +
-    //         (amountInfo?.reSIP || 0) +
-    //         (amountInfo?.lumpsum || 0) +
-    //         (amountInfo?.additional || 0)
-    //     );
-    //     const net = total - (amountInfo?.redemption || 0);
-    //     return net.toLocaleString('en-IN');
-    // };
-
-
     const formatDateDMY = (dateString) => {
         const date = new Date(dateString);
         const day = String(date.getDate()).padStart(2, '0');
@@ -170,7 +158,7 @@ export default function ChartGenerator() {
     return (
         <div className="chart-layout">
             <div className="controls">
-                <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <h3>
                     <MdTune style={{ color: '#3f51b5' }} /> Chart Controls
                 </h3>
 
@@ -194,7 +182,7 @@ export default function ChartGenerator() {
                 <label>Duration (months):</label>
                 <select value={duration} onChange={e => setDuration(e.target.value)}>
                     <option value="1">1 Month</option>
-                    <option value="4">4 Months</option>
+                    <option value="3">3 Months</option>
                     <option value="12">1 Year</option>
                 </select>
 
@@ -219,7 +207,7 @@ export default function ChartGenerator() {
                 <button onClick={handleGenerateChart}>Generate Chart</button>
                 <hr />
 
-                <label>Select Month for Client Stats:</label>
+                <label>Monthwise Client Transaction Status</label>
                 <input type="month" value={monthForClientStats} onChange={e => setMonthForClientStats(e.target.value)} />
                 <button onClick={handleClientStats}>Show Client Stats</button>
             </div>
@@ -236,7 +224,7 @@ export default function ChartGenerator() {
                 {chartData && !clientChartData && (
                     <>
                         {transactionType === 'SIPandLumpsum' ? (
-                            <div style={{ width: '400px', height: '500px', margin: '0 auto' }}>
+                            <div className='chart'>
                                 <Pie data={chartData} options={chartOptions} />
                             </div>
                         ) : (
@@ -254,7 +242,6 @@ export default function ChartGenerator() {
                                     <li><strong style={{ color: '#9c27b0' }}>Redemption:</strong> ₹{(amountInfo.redemption || 0).toLocaleString('en-IN')}</li>
                                 </ul>
                             </div>
-
                         )}
                     </>
                 )}
